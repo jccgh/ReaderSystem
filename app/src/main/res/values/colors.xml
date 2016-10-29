@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--System-->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <!--my_system-->
+    <color name="colorPrimary2">#EE5048</color>
+    <color name="colorPrimaryDark2">#EE5048</color>
+    <color name="colorAccent2">#FF4081</color>
+    <!--login-->
+    <color name="login_tv_color">#1FBAF3</color>
+    <!--all_can_user-->
+    <color name="bg_color">#ECEDF1</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+    <!--studnet_home-->
+    <color name="student_home_drawer_text_color">#8000</color>
+</resources>

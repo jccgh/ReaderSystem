@@ -1,0 +1,29 @@
+<resources>
+    <!--system-->
+    <string name="app_name">ReaderSystem</string>
+    <!--my_system-->
+    <string name="app_name2">好优阅读</string>
+    <!--loading_and_welcome-->
+    <string name="jump">跳过</string>
+    <string name="open">开启读书之旅</string>
+    <!--login_and_resent-->
+    <string name="login">登录</string>
+    <string name="type">身份</string>
+    <string name="user_name">用户名</string>
+    <string name="password">密码</string>
+    <string name="forget_password">忘记密码</string>
+    <string name="remember">记住我</string>
+    <string name="password2">确认密码</string>
+    <string name="update">修改</string>
+    <!--student_home-->
+    <string name="bookshelf">书架</string>
+    <string name="book_shop">书城</string>
+    <string name="find">发现</string>
+    <string name="my_account">我的账户</string>
+    <string name="sign_in">签到</string>
+    <string name="cloud_bookshelf">云书架</string>
+    <string name="voice_area">有声专区</string>
+    <string name="reader_gift">读者大礼包</string>
+    <string name="setting">设置</string>
+    <string name="night">夜间</string>
+</resources>
