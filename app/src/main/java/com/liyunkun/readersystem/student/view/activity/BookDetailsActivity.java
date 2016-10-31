@@ -9,9 +9,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.liyunkun.readersystem.BaseActivity;
+import com.liyunkun.readersystem.MyApp;
 import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.BookBean;
 import com.liyunkun.readersystem.both.module.bean.BookClassBean;
+import com.liyunkun.readersystem.both.module.bean.DaoSession;
+import com.liyunkun.readersystem.both.module.bean.MyBook;
+import com.liyunkun.readersystem.both.module.bean.MyBookDao;
+import com.liyunkun.readersystem.both.module.bean.MyFavorite;
+import com.liyunkun.readersystem.both.module.bean.MyFavoriteDao;
 import com.liyunkun.readersystem.student.presenter.BookDetailsPresenter;
 import com.liyunkun.readersystem.student.view.MyListView;
 import com.liyunkun.readersystem.student.view.adapter.ClassifyListLvAdapter;
@@ -41,6 +47,12 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout mFavoriteLayout;
     private ImageView mFavoriteImg;
     private TextView mFavoriteTv;
+    private MyFavoriteDao myFavoriteDao;
+    private DaoSession daoSession;
+    private MyBookDao myBookDao;
+    private ImageView mMyBookImg;
+    private TextView mMyBookTv;
+    private LinearLayout mMyBookLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +60,37 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_book_details);
         initData2BookBean();
         initView();
+        initFavorite();
+        initBook();
         setData2ClassName();
         presenter.start(bookBean.getName(), bookBean.getClassId());
         presenter.start(bookBean.getName(), bookBean.getAuthor());
     }
 
+    private void initBook() {
+        myBookDao = daoSession.getMyBookDao();
+        List<MyBook> list = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+        if (list != null && list.size() > 0) {
+            mMyBookImg.setImageResource(R.mipmap.ic_launcher);
+            mMyBookTv.setText("移除书架");
+        } else {
+            mMyBookImg.setImageResource(R.mipmap.ic_launcher);
+            mMyBookTv.setText("加入书架");
+        }
+    }
+
+    private void initFavorite() {
+        daoSession = ((MyApp) getApplication()).daoSession;
+        myFavoriteDao = daoSession.getMyFavoriteDao();
+        List<MyFavorite> list = myFavoriteDao.queryBuilder().where(MyFavoriteDao.Properties.BookId.eq(bookBean.getBookId())).list();
+        if (list != null && list.size() > 0) {
+            mFavoriteImg.setImageResource(R.mipmap.ic_launcher);
+            mFavoriteTv.setText("取消收藏");
+        } else {
+            mFavoriteImg.setImageResource(R.mipmap.ic_launcher);
+            mFavoriteTv.setText("收藏");
+        }
+    }
 
     private void setData2ClassName() {
         String type = null;
@@ -87,6 +125,9 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         mFavoriteLayout = ((LinearLayout) findViewById(R.id.favorite_layout));
         mFavoriteImg = ((ImageView) findViewById(R.id.favorite_img));
         mFavoriteTv = ((TextView) findViewById(R.id.favorite_tv));
+        mMyBookImg = ((ImageView) findViewById(R.id.my_book_img));
+        mMyBookTv = ((TextView) findViewById(R.id.my_book_tv));
+        mMyBookLayout = ((LinearLayout) findViewById(R.id.my_book_layout));
 
 
         Picasso.with(this).load(bookBean.getBookImg()).into(mBookImg);
@@ -104,6 +145,7 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
 
         mFavoriteLayout.setOnClickListener(this);
         mGoBack.setOnClickListener(this);
+        mMyBookLayout.setOnClickListener(this);
     }
 
     private void initData2BookBean() {
@@ -118,7 +160,46 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.favorite_layout:
+                updateFavorite();
                 break;
+            case R.id.my_book_layout:
+                updateBook();
+                break;
+        }
+    }
+
+    private void updateBook() {
+        if ("加入书架".equals(mMyBookTv.getText().toString())) {
+            myBookDao.save(new MyBook(null, bookBean.getName(), bookBean.getBookImg(), bookBean.getBookId(),
+                    bookBean.getAuthor(), bookBean.getFrom(), bookBean.getDescription(),
+                    bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), 0, 0));
+            mMyBookImg.setImageResource(R.mipmap.ic_launcher);
+            mMyBookTv.setText("移除书架");
+
+        } else if ("移除书架".equals(mMyBookTv.getText().toString())) {
+            List<MyBook> list = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+            if (list != null && list.size() > 0) {
+                myBookDao.delete(list.get(0));
+                mMyBookImg.setImageResource(R.mipmap.ic_launcher);
+                mMyBookTv.setText("加入书架");
+            }
+        }
+    }
+
+    private void updateFavorite() {
+        if ("收藏".equals(mFavoriteTv.getText().toString())) {
+            myFavoriteDao.save(new MyFavorite(null, bookBean.getName(), bookBean.getBookImg(), bookBean.getBookId(),
+                    bookBean.getAuthor(), bookBean.getFrom(), bookBean.getDescription(),
+                    bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId()));
+            mFavoriteImg.setImageResource(R.mipmap.ic_launcher);
+            mFavoriteTv.setText("取消收藏");
+        } else if ("取消收藏".equals(mFavoriteTv.getText().toString())) {
+            List<MyFavorite> list = myFavoriteDao.queryBuilder().where(MyFavoriteDao.Properties.BookId.eq(bookBean.getBookId())).list();
+            if (list != null && list.size() > 0) {
+                myFavoriteDao.delete(list.get(0));
+                mFavoriteImg.setImageResource(R.mipmap.ic_launcher);
+                mFavoriteTv.setText("收藏");
+            }
         }
     }
 

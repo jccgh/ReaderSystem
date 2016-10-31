@@ -4,7 +4,11 @@ import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.liyunkun.readersystem.both.module.bean.BookClassBean;
+import com.liyunkun.readersystem.both.module.bean.DaoMaster;
+import com.liyunkun.readersystem.both.module.bean.DaoSession;
 import com.liyunkun.readersystem.utils.MyConstants;
+
+import org.greenrobot.greendao.database.Database;
 
 import java.util.ArrayList;
 
@@ -17,6 +21,8 @@ import cn.bmob.v3.Bmob;
 public class MyApp extends Application {
 
 
+    public DaoSession daoSession;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -25,6 +31,12 @@ public class MyApp extends Application {
         //初始化Fresco
         Fresco.initialize(this);
         initDataList();
+        initBD();
+    }
+    private void initBD() {
+        DaoMaster.DevOpenHelper openHelper = new DaoMaster.DevOpenHelper(this,"readerSystem.db",null);
+        Database db = openHelper.getWritableDb();
+        daoSession = new DaoMaster(db).newSession();
     }
     private void initDataList() {
         MyConstants.list=new ArrayList<>();
