@@ -36,7 +36,8 @@
         <activity android:name=".administrator.view.activity.AdministratorHomeActivity" />
         <activity android:name=".student.view.activity.RankActivity" />
         <activity android:name=".student.view.activity.ClassifyActivity" />
-        <activity android:name=".student.view.activity.ClassifyListActivity"></activity>
+        <activity android:name=".student.view.activity.ClassifyListActivity" />
+        <activity android:name=".student.view.activity.BookDetailsActivity"></activity>
     </application>
 
 </manifest>

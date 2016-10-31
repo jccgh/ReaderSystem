@@ -1,11 +1,13 @@
 package com.liyunkun.readersystem.both.module.bean;
 
+import java.io.Serializable;
+
 import cn.bmob.v3.BmobObject;
 
 /**
  * Created by liyunkun on 2016/10/19 0019.
  */
-public class BookBean extends BmobObject {
+public class BookBean extends BmobObject implements Serializable{
 
     private String name;//书名
     private String bookImg;//图书图片的url

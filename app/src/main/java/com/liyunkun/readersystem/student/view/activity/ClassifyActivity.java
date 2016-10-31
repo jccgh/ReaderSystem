@@ -4,18 +4,18 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.liyunkun.readersystem.BaseActivity;
 import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.BookClassBean;
 import com.liyunkun.readersystem.student.view.adapter.ClassifyRvAdapter;
 import com.liyunkun.readersystem.utils.MyConstants;
 
-public class ClassifyActivity extends AppCompatActivity implements View.OnClickListener {
+public class ClassifyActivity extends BaseActivity implements View.OnClickListener {
 
     private RecyclerView mRv;
     private ImageView mGoBack;
