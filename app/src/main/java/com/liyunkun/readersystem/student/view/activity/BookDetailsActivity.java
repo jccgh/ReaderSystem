@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.liyunkun.readersystem.BaseActivity;
@@ -37,6 +38,9 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
     private MyListView mLvType;
     private MyListView mLvAuthor;
     private BookDetailsPresenter presenter = new BookDetailsPresenter(this);
+    private LinearLayout mFavoriteLayout;
+    private ImageView mFavoriteImg;
+    private TextView mFavoriteTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,7 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         presenter.start(bookBean.getName(), bookBean.getClassId());
         presenter.start(bookBean.getName(), bookBean.getAuthor());
     }
+
 
     private void setData2ClassName() {
         String type = null;
@@ -79,6 +84,10 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         mGoBack = ((ImageView) findViewById(R.id.go_back));
         mLvType = ((MyListView) findViewById(R.id.lv_type));
         mLvAuthor = ((MyListView) findViewById(R.id.lv_author));
+        mFavoriteLayout = ((LinearLayout) findViewById(R.id.favorite_layout));
+        mFavoriteImg = ((ImageView) findViewById(R.id.favorite_img));
+        mFavoriteTv = ((TextView) findViewById(R.id.favorite_tv));
+
 
         Picasso.with(this).load(bookBean.getBookImg()).into(mBookImg);
         mBookName.setText(bookBean.getName());
@@ -92,6 +101,8 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         } else {
             mFrom.setText("出版社： " + "");
         }
+
+        mFavoriteLayout.setOnClickListener(this);
         mGoBack.setOnClickListener(this);
     }
 
@@ -105,6 +116,8 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.go_back:
                 finish();
+                break;
+            case R.id.favorite_layout:
                 break;
         }
     }

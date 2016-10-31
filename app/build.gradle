@@ -17,6 +17,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    greendao{
+        //数据库版本号
+        schemaVersion 1
+        //生成代码的路径
+        targetGenDir 'src/main/java'
+    }
     sourceSets { main { jniLibs.srcDirs = ['libs'] } }
 }
 

@@ -16,6 +16,7 @@ import cn.bmob.v3.Bmob;
  */
 public class MyApp extends Application {
 
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -25,7 +26,6 @@ public class MyApp extends Application {
         Fresco.initialize(this);
         initDataList();
     }
-
     private void initDataList() {
         MyConstants.list=new ArrayList<>();
         MyConstants.list.add(new BookClassBean(1,"孕妇育儿",50,"http://tnfs.tngou.net/image/book/150802/29c1f9364159b58d4542b7fe3d25e0fb.jpg"));
