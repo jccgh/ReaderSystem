@@ -35,7 +35,7 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
         setContentView(R.layout.activity_classify_list);
         initData2BCB();
         initView();
-        presenter.start(bookClassBean.getClassId(), bookClassBean.getTotalBook());
+        presenter.start(bookClassBean.getClassId());
     }
 
     private void initView() {
@@ -60,7 +60,7 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
 
     @Override
     public void updateLv(final List<BookBean> list) {
-        ClassifyListLvAdapter adapter = new ClassifyListLvAdapter(list, this);
+        ClassifyListLvAdapter adapter = new ClassifyListLvAdapter(list, this,true);
         mLv.setAdapter(adapter);
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

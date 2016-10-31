@@ -33,7 +33,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".administrator.view.activity.AdministratorHomeActivity" />
+        <activity android:name=".administrator.view.activity.AdministratorHomeActivity" >
+
+        </activity>
         <activity android:name=".student.view.activity.RankActivity" />
         <activity android:name=".student.view.activity.ClassifyActivity" />
         <activity android:name=".student.view.activity.ClassifyListActivity" />

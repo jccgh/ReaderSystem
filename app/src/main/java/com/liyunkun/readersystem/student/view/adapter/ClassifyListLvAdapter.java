@@ -21,10 +21,12 @@ public class ClassifyListLvAdapter extends BaseAdapter {
     private List<BookBean> list;
     private Context context;
     private LayoutInflater inflater;
+    private boolean isShowAddImg;
 
-    public ClassifyListLvAdapter(List<BookBean> list, Context context) {
+    public ClassifyListLvAdapter(List<BookBean> list, Context context,boolean isShowAddImg) {
         this.list = list;
         this.context = context;
+        this.isShowAddImg=isShowAddImg;
         inflater = LayoutInflater.from(context);
     }
 
@@ -56,6 +58,12 @@ public class ClassifyListLvAdapter extends BaseAdapter {
         BookBean bookBean = list.get(position);
         Picasso.with(context).load(bookBean.getBookImg()).into(holder.bookImg);
         holder.bookName.setText(bookBean.getName());
+        if (isShowAddImg) {
+            holder.addImg.setVisibility(View.VISIBLE);
+            holder.addImg.setImageResource(R.mipmap.ic_launcher);
+        } else {
+            holder.addImg.setVisibility(View.GONE);
+        }
         if (bookBean.getAuthor() == null || "".equals(bookBean.getAuthor())) {
             holder.author.setText("未知作者");
         } else {

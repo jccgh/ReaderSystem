@@ -1,4 +1,4 @@
-package com.liyunkun.readersystem.student.module.intf;
+package com.liyunkun.readersystem.administrator.module.intf;
 
 import com.liyunkun.readersystem.both.module.bean.BookBean;
 
