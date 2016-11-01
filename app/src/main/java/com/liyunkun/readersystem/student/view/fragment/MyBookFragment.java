@@ -1,5 +1,6 @@
 package com.liyunkun.readersystem.student.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,6 +17,7 @@ import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.DaoSession;
 import com.liyunkun.readersystem.both.module.bean.MyBook;
 import com.liyunkun.readersystem.both.module.bean.MyBookDao;
+import com.liyunkun.readersystem.read.view.activity.ReadActivity;
 import com.liyunkun.readersystem.student.view.adapter.MyBookFgRvAdapter;
 import com.liyunkun.readersystem.utils.MyConstants;
 
@@ -29,7 +31,6 @@ public class MyBookFragment extends BaseFragment {
     private ImageView mIv;
     private RecyclerView mRv;
     private MyBookDao myBookDao;
-    private int mode = 1;
 
     @Nullable
     @Override
@@ -40,22 +41,36 @@ public class MyBookFragment extends BaseFragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initData2BookList();
+    }
+
     private void initData2BookList() {
         DaoSession daoSession = ((MyApp) getActivity().getApplication()).daoSession;
         myBookDao = daoSession.getMyBookDao();
-        List<MyBook> list = myBookDao.queryBuilder().list();
+        final List<MyBook> list = myBookDao.queryBuilder().list();
         if (list != null && list.size() > 0) {
             mIv.setVisibility(View.GONE);
             mRv.setVisibility(View.VISIBLE);
-            if (MyConstants.BOOK_MODE == mode) {
+            if (MyConstants.BOOK_MODE == MyConstants.mode) {
                 GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
                 mRv.setLayoutManager(manager);
-            } else if (MyConstants.LIST_MODE == mode) {
+            } else if (MyConstants.LIST_MODE == MyConstants.mode) {
                 LinearLayoutManager manager = new LinearLayoutManager(getActivity());
                 mRv.setLayoutManager(manager);
             }
-            MyBookFgRvAdapter adapter = new MyBookFgRvAdapter(mode, list, getActivity());
+            MyBookFgRvAdapter adapter = new MyBookFgRvAdapter(MyConstants.mode, list, getActivity());
             mRv.setAdapter(adapter);
+            adapter.setOnItemViewListener(new MyBookFgRvAdapter.OnItemViewListener() {
+                @Override
+                public void onItemClickListener(View v, int position) {
+                    Intent intent = new Intent(getActivity(), ReadActivity.class);
+                    intent.putExtra("bookId",list.get(position).getBookId());
+                    startActivity(intent);
+                }
+            });
         } else {
             mIv.setVisibility(View.VISIBLE);
             mRv.setVisibility(View.GONE);

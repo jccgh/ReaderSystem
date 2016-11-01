@@ -11,7 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/colorPrimary2">
-
+        <TextView
+            android:id="@+id/book_shelf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="书架"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

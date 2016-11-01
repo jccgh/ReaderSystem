@@ -15,6 +15,7 @@ public class MyConstants {
     public static final String REMEMBER="remember";
     public static final int BOOK_MODE=0;
     public static final int LIST_MODE=1;
+    public static int mode = LIST_MODE;
 
     public static List<BookClassBean> list;
 

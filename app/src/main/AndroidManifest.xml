@@ -26,20 +26,21 @@
         <activity android:name=".both.view.activity.WelcomeActivity" />
         <activity android:name=".both.view.activity.LoginActivity" />
         <activity android:name=".both.view.activity.ResentActivity" />
-        <activity android:name=".student.view.activity.StudentHomeActivity">
+        <activity
+            android:name=".student.view.activity.StudentHomeActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".administrator.view.activity.AdministratorHomeActivity" >
-
-        </activity>
+        <activity android:name=".administrator.view.activity.AdministratorHomeActivity"></activity>
         <activity android:name=".student.view.activity.RankActivity" />
         <activity android:name=".student.view.activity.ClassifyActivity" />
         <activity android:name=".student.view.activity.ClassifyListActivity" />
-        <activity android:name=".student.view.activity.BookDetailsActivity"></activity>
+        <activity android:name=".student.view.activity.BookDetailsActivity" />
+        <activity android:name=".read.view.activity.ReadActivity"></activity>
     </application>
 
 </manifest>

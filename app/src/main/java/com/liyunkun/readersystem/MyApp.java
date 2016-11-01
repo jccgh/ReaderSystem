@@ -13,6 +13,7 @@ import org.greenrobot.greendao.database.Database;
 import java.util.ArrayList;
 
 import cn.bmob.v3.Bmob;
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * Created by liyunkun on 2016/10/13 0013.
@@ -30,6 +31,7 @@ public class MyApp extends Application {
         Bmob.initialize(this, "0c0b50e4353a6dd5ad625b04006a3f6a");
         //初始化Fresco
         Fresco.initialize(this);
+        ShareSDK.initSDK(this);
         initDataList();
         initBD();
     }

@@ -32,6 +32,8 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
     private ImageView mGoBack;
     private TextView mTitle;
     private ClassifyListPresenter presenter = new ClassifyListPresenter(this);
+    private ClassifyListLvAdapter adapter;
+    private TextView mBookShelf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +44,17 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
         presenter.start(bookClassBean.getClassId());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenter.start(bookClassBean.getClassId());
+    }
+
     private void initView() {
         mLv = ((ListView) findViewById(R.id.lv));
         mGoBack = ((ImageView) findViewById(R.id.iv));
         mTitle = ((TextView) findViewById(R.id.tv));
+        mBookShelf = ((TextView) findViewById(R.id.book_shelf));
 
 
         mTitle.setText(bookClassBean.getType());
@@ -53,6 +62,12 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        mBookShelf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ClassifyListActivity.this, StudentHomeActivity.class));
             }
         });
     }
@@ -66,7 +81,7 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
     public void updateLv(final List<BookBean> list) {
         DaoSession daoSession = ((MyApp) getApplication()).daoSession;
         final MyBookDao myBookDao = daoSession.getMyBookDao();
-        final ClassifyListLvAdapter adapter = new ClassifyListLvAdapter(list, this,true,myBookDao);
+        adapter = new ClassifyListLvAdapter(list, this,true,myBookDao);
         mLv.setAdapter(adapter);
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

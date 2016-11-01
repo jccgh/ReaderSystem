@@ -12,6 +12,17 @@
         android:layout_height="48dp"
         android:background="@color/colorPrimary2">
 
+        <TextView
+            android:id="@+id/book_shelf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="书架"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
         <ImageView
             android:id="@+id/go_back"
             android:layout_width="48dp"
@@ -334,7 +345,7 @@
                         android:layout_height="32dp"
                         android:layout_gravity="center"
                         android:padding="5dp"
-                        android:src="@drawable/similar_author" />
+                        android:src="@drawable/author_write" />
 
                     <TextView
                         android:id="@+id/author3"

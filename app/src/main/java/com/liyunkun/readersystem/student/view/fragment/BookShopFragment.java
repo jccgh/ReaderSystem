@@ -18,6 +18,8 @@ import com.liyunkun.readersystem.BaseFragment;
 import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.BookBean;
 import com.liyunkun.readersystem.student.module.bean.BookShopLvBean;
+import com.liyunkun.readersystem.student.presenter.BookShopPresenter;
+import com.liyunkun.readersystem.student.view.activity.BookDetailsActivity;
 import com.liyunkun.readersystem.student.view.activity.ClassifyActivity;
 import com.liyunkun.readersystem.student.view.activity.RankActivity;
 import com.liyunkun.readersystem.student.view.adapter.BookShopLvAdapter;
@@ -41,13 +43,14 @@ public class BookShopFragment extends BaseFragment implements IBookShopView, Vie
     private Handler mHandler = new Handler();
     private LinearLayout mRankLayout;
     private LinearLayout mClassifyLayout;
+    private BookShopPresenter presenter = new BookShopPresenter(this);
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.book_shop_fg_layout, container, false);
         initView(view);
-        initData2Lv(null);
+        presenter.start();
         initData2Vp(null);
         mRankLayout.setOnClickListener(this);
         mClassifyLayout.setOnClickListener(this);
@@ -120,25 +123,19 @@ public class BookShopFragment extends BaseFragment implements IBookShopView, Vie
     }
 
     @Override
-    public void initData2Lv(List<BookShopLvBean> list) {
-
-        //
-        List<BookShopLvBean> been = new ArrayList<>();
-        List<BookBean> bookBeen = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            BookBean book = new BookBean();
-            bookBeen.add(book);
-        }
-        been.add(new BookShopLvBean("重榜精选", bookBeen));
-        been.add(new BookShopLvBean("主编推荐", bookBeen));
-        been.add(new BookShopLvBean("火热新书", bookBeen));
-        been.add(new BookShopLvBean("热门作品", bookBeen));
-        been.add(new BookShopLvBean("与你相关", bookBeen));
-        //
-
-        BookShopLvAdapter adapter = new BookShopLvAdapter(been, getActivity());
+    public void initData2Lv(final List<BookShopLvBean> list) {
+        BookShopLvAdapter adapter = new BookShopLvAdapter(list, getActivity());
         measureHeightLv(adapter);
         mLv.setAdapter(adapter);
+        adapter.setOnClick(new BookShopLvAdapter.onClick() {
+            @Override
+            public void onClick(View v, int position, int childPosition) {
+                BookBean bookBean = list.get(position).getList().get(childPosition);
+                Intent intent = new Intent(getActivity(), BookDetailsActivity.class);
+                intent.putExtra("bookBean", bookBean);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

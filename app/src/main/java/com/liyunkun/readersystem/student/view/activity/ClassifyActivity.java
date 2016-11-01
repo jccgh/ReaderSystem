@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.liyunkun.readersystem.BaseActivity;
 import com.liyunkun.readersystem.R;
@@ -19,6 +20,7 @@ public class ClassifyActivity extends BaseActivity implements View.OnClickListen
 
     private RecyclerView mRv;
     private ImageView mGoBack;
+    private TextView mBookShelf;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class ClassifyActivity extends BaseActivity implements View.OnClickListen
         initView();
         initData2Rv();
         mGoBack.setOnClickListener(this);
+        mBookShelf.setOnClickListener(this);
     }
 
     private void initData2Rv() {
@@ -48,6 +51,7 @@ public class ClassifyActivity extends BaseActivity implements View.OnClickListen
     private void initView() {
         mRv = ((RecyclerView) findViewById(R.id.rv));
         mGoBack = ((ImageView) findViewById(R.id.go_back));
+        mBookShelf = ((TextView) findViewById(R.id.book_shelf));
     }
 
     @Override
@@ -55,6 +59,9 @@ public class ClassifyActivity extends BaseActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.go_back:
                 finish();
+                break;
+            case R.id.book_shelf:
+                startActivity(new Intent(this, StudentHomeActivity.class));
                 break;
         }
     }

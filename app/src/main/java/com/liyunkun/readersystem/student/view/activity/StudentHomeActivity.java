@@ -1,5 +1,7 @@
 package com.liyunkun.readersystem.student.view.activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ import com.liyunkun.readersystem.student.view.adapter.StudentPwLvAdapter;
 import com.liyunkun.readersystem.student.view.fragment.BookShopFragment;
 import com.liyunkun.readersystem.student.view.fragment.FindFragment;
 import com.liyunkun.readersystem.student.view.fragment.MyBookFragment;
+import com.liyunkun.readersystem.utils.MyConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +53,9 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
     private PopupWindow mPw;
     private SimpleDraweeView mDrawerUserIcon;
     private StudentHomeVpAdapter vpAdapter;
+    private List<StudentPwLvBean> lvBeen;
+    private StudentPwLvAdapter adapter;
+    private SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,13 +143,10 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-//        initData2Fragment();
-//        setAdapter2Vp();
-//        vpAdapter.notifyDataSetChanged();
     }
 
     private void initImage2UserIcon() {
-        Uri uri=Uri.parse("res:///"+R.drawable.default_user_icon);
+        Uri uri = Uri.parse("res:///" + R.drawable.default_user_icon);
         mIvMine.setImageURI(uri);
         mDrawerUserIcon.setImageURI(uri);
     }
@@ -172,42 +175,72 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
         mIvMore = ((ImageView) findViewById(R.id.more));
         mSearch = ((ImageView) findViewById(R.id.search));
         mDrawerUserIcon = ((SimpleDraweeView) findViewById(R.id.iv_user_face));
+        sp = getSharedPreferences("modeNumber",MODE_PRIVATE);
+        MyConstants.mode=sp.getInt("mode",MyConstants.mode);
         userName = getIntent().getStringExtra("userName");
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.search:
                 Toast.makeText(StudentHomeActivity.this, "search", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.more:
-            {
+            case R.id.more: {
                 View view = LayoutInflater.from(StudentHomeActivity.this).inflate(R.layout.study_home_popup_window, null);
                 ListView lv = (ListView) view.findViewById(R.id.lv);
-                final List<StudentPwLvBean> lvBeen=new ArrayList<>();
-                lvBeen.add(new StudentPwLvBean(R.drawable.shelf_edit_img,"编辑"));
-                lvBeen.add(new StudentPwLvBean(R.drawable.shelf_list_icon,"列表模式"));
-                lvBeen.add(new StudentPwLvBean(R.drawable.shelf_import_icon,"本地传书"));
-                lvBeen.add(new StudentPwLvBean(R.drawable.local_shelf_books,"本地书籍"));
-                lvBeen.add(new StudentPwLvBean(R.drawable.shelf_feedback_icon,"意见反馈"));
-                StudentPwLvAdapter adapter=new StudentPwLvAdapter(lvBeen,this);
+                lvBeen = new ArrayList<>();
+                lvBeen.add(new StudentPwLvBean(R.drawable.shelf_edit_img, "编辑"));
+                if (MyConstants.LIST_MODE == MyConstants.mode) {
+                    lvBeen.add(new StudentPwLvBean(R.drawable.shelf_map_icon, "书架模式"));
+                } else if (MyConstants.BOOK_MODE == MyConstants.mode) {
+                    lvBeen.add(new StudentPwLvBean(R.drawable.shelf_list_icon, "列表模式"));
+                }
+                lvBeen.add(new StudentPwLvBean(R.drawable.shelf_import_icon, "本地传书"));
+                lvBeen.add(new StudentPwLvBean(R.drawable.local_shelf_books, "本地书籍"));
+                lvBeen.add(new StudentPwLvBean(R.drawable.shelf_feedback_icon, "意见反馈"));
+                adapter = new StudentPwLvAdapter(lvBeen, this);
                 lv.setAdapter(adapter);
                 mPw = new PopupWindow(view,
-                        (int)(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,150,getResources().getDisplayMetrics())),
-                        (int)(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,240,getResources().getDisplayMetrics())));
+                        (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 150, getResources().getDisplayMetrics())),
+                        (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 240, getResources().getDisplayMetrics())));
                 mPw.setOutsideTouchable(true);
                 mPw.setBackgroundDrawable(new BitmapDrawable());
-                mPw.showAsDropDown(mIvMore,0,20);
+                mPw.showAsDropDown(mIvMore, 0, 20);
                 lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Toast.makeText(StudentHomeActivity.this, lvBeen.get(position).getContent(), Toast.LENGTH_SHORT).show();
+                        switch (position) {
+                            case 0://编辑
+                                break;
+                            case 1://列表模式
+                                if (MyConstants.LIST_MODE == MyConstants.mode) {
+                                    MyConstants.mode = MyConstants.BOOK_MODE;
+                                    sp.edit().putInt("mode",MyConstants.mode).commit();
+                                    Intent intent = new Intent(StudentHomeActivity.this, StudentHomeActivity.class);
+                                    intent.putExtra("userName",userName);
+                                    startActivity(intent);
+                                } else if (MyConstants.BOOK_MODE == MyConstants.mode) {
+                                    MyConstants.mode = MyConstants.LIST_MODE;
+                                    sp.edit().putInt("mode",MyConstants.mode).commit();
+                                    Intent intent = new Intent(StudentHomeActivity.this, StudentHomeActivity.class);
+                                    intent.putExtra("userName",userName);
+                                    startActivity(intent);
+                                }
+                                break;
+                            case 2://本地传书
+                                break;
+                            case 3://本地书籍
+                                break;
+                            case 4://意见反馈
+                                break;
+
+                        }
                         mPw.dismiss();
                     }
                 });
             }
-                break;
+            break;
             case R.id.iv_mine:
                 mDrawerLayout.openDrawer(Gravity.LEFT);
                 break;
