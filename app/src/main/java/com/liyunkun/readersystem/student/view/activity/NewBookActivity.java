@@ -2,96 +2,74 @@ package com.liyunkun.readersystem.student.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.liyunkun.readersystem.BaseActivity;
 import com.liyunkun.readersystem.MyApp;
 import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.BookBean;
-import com.liyunkun.readersystem.both.module.bean.BookClassBean;
-import com.liyunkun.readersystem.both.module.bean.DaoSession;
 import com.liyunkun.readersystem.both.module.bean.MyBook;
 import com.liyunkun.readersystem.both.module.bean.MyBookDao;
-import com.liyunkun.readersystem.student.presenter.ClassifyListPresenter;
+import com.liyunkun.readersystem.student.presenter.NewBookPresenter;
 import com.liyunkun.readersystem.student.view.adapter.ClassifyListLvAdapter;
-import com.liyunkun.readersystem.student.view.intf.IClassifyListView;
+import com.liyunkun.readersystem.student.view.intf.INewBookView;
 import com.liyunkun.readersystem.utils.MyConstants;
 
 import java.util.List;
 
-/**
- * https://www.zhihu.com/question/30895291/answer/128498676
- */
-public class ClassifyListActivity extends BaseActivity implements IClassifyListView {
+public class NewBookActivity extends AppCompatActivity implements View.OnClickListener,INewBookView {
 
-    private BookClassBean bookClassBean;
-    private ListView mLv;
     private ImageView mGoBack;
-    private TextView mTitle;
-    private ClassifyListPresenter presenter = new ClassifyListPresenter(this);
-    private ClassifyListLvAdapter adapter;
     private TextView mBookShelf;
+    private ListView mLv;
     private MyBookDao myBookDao;
+    private ClassifyListLvAdapter adapter;
+    private NewBookPresenter presenter=new NewBookPresenter(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_classify_list);
-        initData2BCB();
+        setContentView(R.layout.activity_new_book);
         initView();
-        presenter.start(bookClassBean.getClassId());
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        presenter.start(bookClassBean.getClassId());
+        presenter.start();
+        mGoBack.setOnClickListener(this);
+        mBookShelf.setOnClickListener(this);
     }
 
     private void initView() {
-        mLv = ((ListView) findViewById(R.id.lv));
-        mGoBack = ((ImageView) findViewById(R.id.iv));
-        mTitle = ((TextView) findViewById(R.id.tv));
+        mGoBack = ((ImageView) findViewById(R.id.go_back));
         mBookShelf = ((TextView) findViewById(R.id.book_shelf));
-
-
-        mTitle.setText(bookClassBean.getType());
-        mGoBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        mBookShelf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ClassifyListActivity.this, StudentHomeActivity.class);
-                intent.putExtra(MyConstants.USER_NAME,StudentHomeActivity.userName);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void initData2BCB() {
-        Intent intent = getIntent();
-        bookClassBean = (BookClassBean) intent.getSerializableExtra("bookClassBean");
+        mLv = ((ListView) findViewById(R.id.lv));
     }
 
     @Override
-    public void updateLv(final List<BookBean> list) {
-        DaoSession daoSession = ((MyApp) getApplication()).daoSession;
-        myBookDao = daoSession.getMyBookDao();
-        adapter = new ClassifyListLvAdapter(list, this,true, myBookDao);
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.go_back:
+                finish();
+                break;
+            case R.id.book_shelf:
+                Intent intent = new Intent(this, StudentHomeActivity.class);
+                intent.putExtra(MyConstants.USER_NAME,StudentHomeActivity.userName);
+                startActivity(intent);
+                break;
+        }
+    }
+
+    @Override
+    public void updateData2Lv(final List<BookBean> list) {
+        myBookDao = ((MyApp) getApplication()).daoSession.getMyBookDao();
+        adapter = new ClassifyListLvAdapter(list, this, true, myBookDao);
         mLv.setAdapter(adapter);
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ClassifyListActivity.this, BookDetailsActivity.class);
-                intent.putExtra("bookBean",list.get(position));
+                Intent intent = new Intent(NewBookActivity.this, BookDetailsActivity.class);
+                intent.putExtra("bookBean", list.get(position));
                 startActivity(intent);
             }
         });

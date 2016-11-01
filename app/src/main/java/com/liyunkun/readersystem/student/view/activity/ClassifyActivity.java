@@ -61,7 +61,9 @@ public class ClassifyActivity extends BaseActivity implements View.OnClickListen
                 finish();
                 break;
             case R.id.book_shelf:
-                startActivity(new Intent(this, StudentHomeActivity.class));
+                Intent intent = new Intent(this, StudentHomeActivity.class);
+                intent.putExtra(MyConstants.USER_NAME,StudentHomeActivity.userName);
+                startActivity(intent);
                 break;
         }
     }

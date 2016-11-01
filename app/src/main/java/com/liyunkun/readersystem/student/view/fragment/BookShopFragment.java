@@ -21,7 +21,9 @@ import com.liyunkun.readersystem.student.module.bean.BookShopLvBean;
 import com.liyunkun.readersystem.student.presenter.BookShopPresenter;
 import com.liyunkun.readersystem.student.view.activity.BookDetailsActivity;
 import com.liyunkun.readersystem.student.view.activity.ClassifyActivity;
+import com.liyunkun.readersystem.student.view.activity.NewBookActivity;
 import com.liyunkun.readersystem.student.view.activity.RankActivity;
+import com.liyunkun.readersystem.student.view.activity.RecommendActivity;
 import com.liyunkun.readersystem.student.view.adapter.BookShopLvAdapter;
 import com.liyunkun.readersystem.student.view.adapter.BookShopVpAdapter;
 import com.liyunkun.readersystem.student.view.intf.IBookShopView;
@@ -44,6 +46,8 @@ public class BookShopFragment extends BaseFragment implements IBookShopView, Vie
     private LinearLayout mRankLayout;
     private LinearLayout mClassifyLayout;
     private BookShopPresenter presenter = new BookShopPresenter(this);
+    private LinearLayout mRecommendLayout;
+    private LinearLayout mNewBookLayout;
 
     @Nullable
     @Override
@@ -54,6 +58,8 @@ public class BookShopFragment extends BaseFragment implements IBookShopView, Vie
         initData2Vp(null);
         mRankLayout.setOnClickListener(this);
         mClassifyLayout.setOnClickListener(this);
+        mRecommendLayout.setOnClickListener(this);
+        mNewBookLayout.setOnClickListener(this);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -84,6 +90,8 @@ public class BookShopFragment extends BaseFragment implements IBookShopView, Vie
         mBotLayout = ((LinearLayout) view.findViewById(R.id.bot_layout));
         mRankLayout = ((LinearLayout) view.findViewById(R.id.rank_layout));
         mClassifyLayout = ((LinearLayout) view.findViewById(R.id.classify_layout));
+        mRecommendLayout = ((LinearLayout) view.findViewById(R.id.recommend_layout));
+        mNewBookLayout = ((LinearLayout) view.findViewById(R.id.new_book_layout));
 
 
         mVp.setCurrentItem(Integer.MAX_VALUE / 2);
@@ -192,6 +200,12 @@ public class BookShopFragment extends BaseFragment implements IBookShopView, Vie
                 break;
             case R.id.classify_layout:
                 startActivity(new Intent(getActivity(), ClassifyActivity.class));
+                break;
+            case R.id.recommend_layout:
+                startActivity(new Intent(getActivity(), RecommendActivity.class));
+                break;
+            case R.id.new_book_layout:
+                startActivity(new Intent(getActivity(), NewBookActivity.class));
                 break;
         }
     }

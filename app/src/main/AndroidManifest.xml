@@ -35,12 +35,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".administrator.view.activity.AdministratorHomeActivity"></activity>
+        <activity android:name=".administrator.view.activity.AdministratorHomeActivity" />
         <activity android:name=".student.view.activity.RankActivity" />
         <activity android:name=".student.view.activity.ClassifyActivity" />
         <activity android:name=".student.view.activity.ClassifyListActivity" />
         <activity android:name=".student.view.activity.BookDetailsActivity" />
-        <activity android:name=".read.view.activity.ReadActivity"></activity>
+        <activity android:name=".read.view.activity.ReadActivity" />
+        <activity android:name=".student.view.activity.RecommendActivity" />
+        <activity android:name=".student.view.activity.NewBookActivity"></activity>
     </application>
 
 </manifest>

@@ -39,6 +39,7 @@
             android:paddingTop="10dp">
 
             <LinearLayout
+                android:id="@+id/new_book_layout"
                 android:layout_width="0dp"
                 android:layout_height="72dp"
                 android:layout_weight="1"
@@ -58,6 +59,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/recommend_layout"
                 android:layout_width="0dp"
                 android:layout_height="72dp"
                 android:layout_weight="1"

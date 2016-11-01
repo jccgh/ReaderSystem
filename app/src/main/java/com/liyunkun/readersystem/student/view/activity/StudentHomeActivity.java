@@ -46,7 +46,7 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
     private SimpleDraweeView mIvMine;
     private ImageView mSearch;
     private DrawerLayout mDrawerLayout;
-    private static String userName;
+    public static String userName;
     private RadioButton mMyBook;
     private RadioButton mBookShop;
     private RadioButton mFind;
@@ -64,6 +64,8 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
         findView();
         initData2Fragment();
         setAdapter2Vp();
+        mVp.setCurrentItem(0);
+        mRg.getChildAt(0).setEnabled(true);
         initImage2UserIcon();
         mIvMine.setOnClickListener(this);
         mIvMore.setOnClickListener(this);
@@ -175,9 +177,9 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
         mIvMore = ((ImageView) findViewById(R.id.more));
         mSearch = ((ImageView) findViewById(R.id.search));
         mDrawerUserIcon = ((SimpleDraweeView) findViewById(R.id.iv_user_face));
-        sp = getSharedPreferences("modeNumber",MODE_PRIVATE);
-        MyConstants.mode=sp.getInt("mode",MyConstants.mode);
-        userName = getIntent().getStringExtra("userName");
+        sp = getSharedPreferences(MyConstants.MODE_NUMBER, MODE_PRIVATE);
+        MyConstants.mode = sp.getInt(MyConstants.MODE, MyConstants.mode);
+        userName = getIntent().getStringExtra(MyConstants.USER_NAME);
     }
 
     @Override
@@ -212,19 +214,20 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         switch (position) {
                             case 0://编辑
+
                                 break;
                             case 1://列表模式
                                 if (MyConstants.LIST_MODE == MyConstants.mode) {
                                     MyConstants.mode = MyConstants.BOOK_MODE;
-                                    sp.edit().putInt("mode",MyConstants.mode).commit();
+                                    sp.edit().putInt(MyConstants.MODE, MyConstants.mode).commit();
                                     Intent intent = new Intent(StudentHomeActivity.this, StudentHomeActivity.class);
-                                    intent.putExtra("userName",userName);
+                                    intent.putExtra(MyConstants.USER_NAME, userName);
                                     startActivity(intent);
                                 } else if (MyConstants.BOOK_MODE == MyConstants.mode) {
                                     MyConstants.mode = MyConstants.LIST_MODE;
-                                    sp.edit().putInt("mode",MyConstants.mode).commit();
+                                    sp.edit().putInt(MyConstants.MODE, MyConstants.mode).commit();
                                     Intent intent = new Intent(StudentHomeActivity.this, StudentHomeActivity.class);
-                                    intent.putExtra("userName",userName);
+                                    intent.putExtra(MyConstants.USER_NAME, userName);
                                     startActivity(intent);
                                 }
                                 break;
