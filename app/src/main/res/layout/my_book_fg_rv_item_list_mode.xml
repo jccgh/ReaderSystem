@@ -1,31 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="158dp"
-    android:background="@color/white"
-    android:paddingBottom="15dp"
+    android:paddingLeft="15dp"
     android:paddingRight="15dp"
-    android:paddingTop="15dp">
+    android:layout_height="129dp">
 
     <ImageView
         android:id="@+id/book_img"
-        android:layout_width="128dp"
+        android:layout_width="72dp"
         android:layout_height="128dp"
         android:src="@drawable/book_default" />
-
-    <ImageView
-        android:id="@+id/add_img"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/add_to" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/add_img"
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/book_img"
         android:orientation="vertical">
 
@@ -33,9 +23,8 @@
             android:id="@+id/book_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="书名"
+            android:text="bookName"
             android:textColor="@color/black"
-            android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
@@ -43,6 +32,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="作者  著" />
+            android:text="author" />
     </LinearLayout>
+    <View
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
 </RelativeLayout>

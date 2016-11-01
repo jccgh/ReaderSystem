@@ -49,6 +49,7 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
     private RadioButton mFind;
     private PopupWindow mPw;
     private SimpleDraweeView mDrawerUserIcon;
+    private StudentHomeVpAdapter vpAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +134,14 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        initData2Fragment();
+//        setAdapter2Vp();
+//        vpAdapter.notifyDataSetChanged();
+    }
+
     private void initImage2UserIcon() {
         Uri uri=Uri.parse("res:///"+R.drawable.default_user_icon);
         mIvMine.setImageURI(uri);
@@ -140,7 +149,7 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void setAdapter2Vp() {
-        StudentHomeVpAdapter vpAdapter =  new StudentHomeVpAdapter(getSupportFragmentManager(), mVpList);
+        vpAdapter = new StudentHomeVpAdapter(getSupportFragmentManager(), mVpList);
         mVp.setAdapter(vpAdapter);
     }
 

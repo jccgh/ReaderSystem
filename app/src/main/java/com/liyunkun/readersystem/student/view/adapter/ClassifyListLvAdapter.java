@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.BookBean;
+import com.liyunkun.readersystem.both.module.bean.MyBook;
+import com.liyunkun.readersystem.both.module.bean.MyBookDao;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,12 +24,14 @@ public class ClassifyListLvAdapter extends BaseAdapter {
     private Context context;
     private LayoutInflater inflater;
     private boolean isShowAddImg;
+    private MyBookDao myBookDao;
 
-    public ClassifyListLvAdapter(List<BookBean> list, Context context,boolean isShowAddImg) {
+    public ClassifyListLvAdapter(List<BookBean> list, Context context,boolean isShowAddImg,MyBookDao myBookDao) {
         this.list = list;
         this.context = context;
         this.isShowAddImg=isShowAddImg;
         inflater = LayoutInflater.from(context);
+        this.myBookDao=myBookDao;
     }
 
     @Override
@@ -46,7 +50,7 @@ public class ClassifyListLvAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ClassifyListViewHolder holder;
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.classify_list_lv_item, parent, false);
@@ -60,7 +64,12 @@ public class ClassifyListLvAdapter extends BaseAdapter {
         holder.bookName.setText(bookBean.getName());
         if (isShowAddImg) {
             holder.addImg.setVisibility(View.VISIBLE);
-            holder.addImg.setImageResource(R.mipmap.ic_launcher);
+            List<MyBook> myBooks = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+            if (myBooks != null && myBooks.size() > 0) {
+                holder.addImg.setImageResource(R.drawable.add_to_success);
+            }else {
+                holder.addImg.setImageResource(R.drawable.add_to);
+            }
         } else {
             holder.addImg.setVisibility(View.GONE);
         }
@@ -69,6 +78,14 @@ public class ClassifyListLvAdapter extends BaseAdapter {
         } else {
             holder.author.setText(bookBean.getAuthor() + "  著");
         }
+        holder.addImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onAddImgClickListener(v,position);
+                }
+            }
+        });
         return convertView;
     }
 
@@ -83,32 +100,16 @@ public class ClassifyListLvAdapter extends BaseAdapter {
             bookName = (TextView) itemView.findViewById(R.id.book_name);
             author = (TextView) itemView.findViewById(R.id.author);
             addImg = (ImageView) itemView.findViewById(R.id.add_img);
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (listener != null) {
-//                        listener.onItemClickListener();
-//                    }
-//                }
-//            });
-//            addImg.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    getI
-//                }
-//            });
 
         }
     }
 
-//    public void setListener(OnListener listener) {
-//        this.listener = listener;
-//    }
-//
-//    private OnListener listener;
-//    public interface OnListener {
-//        void onItemClickListener(int position);
-//
-//        void onAddImgClickListener(int position);
-//    }
+    public void setListener(OnListener listener) {
+        this.listener = listener;
+    }
+
+    private OnListener listener;
+    public interface OnListener {
+        void onAddImgClickListener(View v,int position);
+    }
 }

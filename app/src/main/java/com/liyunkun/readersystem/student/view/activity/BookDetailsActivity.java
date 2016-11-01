@@ -53,6 +53,8 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
     private ImageView mMyBookImg;
     private TextView mMyBookTv;
     private LinearLayout mMyBookLayout;
+    private LinearLayout mSimilarAuthorLayout;
+    private LinearLayout mShareLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +73,13 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         myBookDao = daoSession.getMyBookDao();
         List<MyBook> list = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
         if (list != null && list.size() > 0) {
-            mMyBookImg.setImageResource(R.mipmap.ic_launcher);
+            mMyBookImg.setImageResource(R.drawable.bookrack_click);
             mMyBookTv.setText("移除书架");
+            mMyBookTv.setTextColor(getResources().getColor(R.color.tv_color_click));
         } else {
-            mMyBookImg.setImageResource(R.mipmap.ic_launcher);
+            mMyBookImg.setImageResource(R.drawable.bookrack);
             mMyBookTv.setText("加入书架");
+            mMyBookTv.setTextColor(getResources().getColor(R.color.tv_color));
         }
     }
 
@@ -84,11 +88,13 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         myFavoriteDao = daoSession.getMyFavoriteDao();
         List<MyFavorite> list = myFavoriteDao.queryBuilder().where(MyFavoriteDao.Properties.BookId.eq(bookBean.getBookId())).list();
         if (list != null && list.size() > 0) {
-            mFavoriteImg.setImageResource(R.mipmap.ic_launcher);
+            mFavoriteImg.setImageResource(R.drawable.collect_orange);
             mFavoriteTv.setText("取消收藏");
+            mFavoriteTv.setTextColor(getResources().getColor(R.color.tv_color_click));
         } else {
-            mFavoriteImg.setImageResource(R.mipmap.ic_launcher);
+            mFavoriteImg.setImageResource(R.drawable.collect_click);
             mFavoriteTv.setText("收藏");
+            mFavoriteTv.setTextColor(getResources().getColor(R.color.tv_color));
         }
     }
 
@@ -128,6 +134,8 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         mMyBookImg = ((ImageView) findViewById(R.id.my_book_img));
         mMyBookTv = ((TextView) findViewById(R.id.my_book_tv));
         mMyBookLayout = ((LinearLayout) findViewById(R.id.my_book_layout));
+        mSimilarAuthorLayout = ((LinearLayout) findViewById(R.id.similar_author_layout));
+        mShareLayout = ((LinearLayout) findViewById(R.id.share_layout));
 
 
         Picasso.with(this).load(bookBean.getBookImg()).into(mBookImg);
@@ -146,6 +154,7 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         mFavoriteLayout.setOnClickListener(this);
         mGoBack.setOnClickListener(this);
         mMyBookLayout.setOnClickListener(this);
+        mShareLayout.setOnClickListener(this);
     }
 
     private void initData2BookBean() {
@@ -165,7 +174,14 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
             case R.id.my_book_layout:
                 updateBook();
                 break;
+            case R.id.share_layout:
+                shareBook();
+                break;
         }
+    }
+
+    private void shareBook() {
+
     }
 
     private void updateBook() {
@@ -173,15 +189,17 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
             myBookDao.save(new MyBook(null, bookBean.getName(), bookBean.getBookImg(), bookBean.getBookId(),
                     bookBean.getAuthor(), bookBean.getFrom(), bookBean.getDescription(),
                     bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), 0, 0));
-            mMyBookImg.setImageResource(R.mipmap.ic_launcher);
+            mMyBookImg.setImageResource(R.drawable.bookrack_click);
             mMyBookTv.setText("移除书架");
+            mMyBookTv.setTextColor(getResources().getColor(R.color.tv_color_click));
 
         } else if ("移除书架".equals(mMyBookTv.getText().toString())) {
             List<MyBook> list = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
             if (list != null && list.size() > 0) {
                 myBookDao.delete(list.get(0));
-                mMyBookImg.setImageResource(R.mipmap.ic_launcher);
+                mMyBookImg.setImageResource(R.drawable.bookrack);
                 mMyBookTv.setText("加入书架");
+                mMyBookTv.setTextColor(getResources().getColor(R.color.tv_color));
             }
         }
     }
@@ -191,14 +209,16 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
             myFavoriteDao.save(new MyFavorite(null, bookBean.getName(), bookBean.getBookImg(), bookBean.getBookId(),
                     bookBean.getAuthor(), bookBean.getFrom(), bookBean.getDescription(),
                     bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId()));
-            mFavoriteImg.setImageResource(R.mipmap.ic_launcher);
+            mFavoriteImg.setImageResource(R.drawable.collect_orange);
             mFavoriteTv.setText("取消收藏");
+            mFavoriteTv.setTextColor(getResources().getColor(R.color.tv_color_click));
         } else if ("取消收藏".equals(mFavoriteTv.getText().toString())) {
             List<MyFavorite> list = myFavoriteDao.queryBuilder().where(MyFavoriteDao.Properties.BookId.eq(bookBean.getBookId())).list();
             if (list != null && list.size() > 0) {
                 myFavoriteDao.delete(list.get(0));
-                mFavoriteImg.setImageResource(R.mipmap.ic_launcher);
+                mFavoriteImg.setImageResource(R.drawable.collect_click);
                 mFavoriteTv.setText("收藏");
+                mFavoriteTv.setTextColor(getResources().getColor(R.color.tv_color));
             }
         }
     }
@@ -206,7 +226,7 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void setData2LvType(final List<BookBean> list) {
         if (list != null) {
-            ClassifyListLvAdapter adapter = new ClassifyListLvAdapter(list, this, false);
+            ClassifyListLvAdapter adapter = new ClassifyListLvAdapter(list, this, false, null);
             mLvType.setAdapter(adapter);
             mLvType.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -222,8 +242,9 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void setData2LvAuthor(final List<BookBean> list) {
         if (list != null) {
+            mSimilarAuthorLayout.setVisibility(View.VISIBLE);
             mAuthor3.setText(bookBean.getAuthor() + "  还写过……");
-            ClassifyListLvAdapter adapter = new ClassifyListLvAdapter(list, this, false);
+            ClassifyListLvAdapter adapter = new ClassifyListLvAdapter(list, this, false,null);
             mLvAuthor.setAdapter(adapter);
             mLvAuthor.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -233,6 +254,8 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
                     startActivity(intent);
                 }
             });
+        } else {
+            mSimilarAuthorLayout.setVisibility(View.GONE);
         }
     }
 }

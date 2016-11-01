@@ -9,9 +9,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.liyunkun.readersystem.BaseActivity;
+import com.liyunkun.readersystem.MyApp;
 import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.BookBean;
 import com.liyunkun.readersystem.both.module.bean.BookClassBean;
+import com.liyunkun.readersystem.both.module.bean.DaoSession;
+import com.liyunkun.readersystem.both.module.bean.MyBook;
+import com.liyunkun.readersystem.both.module.bean.MyBookDao;
 import com.liyunkun.readersystem.student.presenter.ClassifyListPresenter;
 import com.liyunkun.readersystem.student.view.adapter.ClassifyListLvAdapter;
 import com.liyunkun.readersystem.student.view.intf.IClassifyListView;
@@ -60,7 +64,9 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
 
     @Override
     public void updateLv(final List<BookBean> list) {
-        ClassifyListLvAdapter adapter = new ClassifyListLvAdapter(list, this,true);
+        DaoSession daoSession = ((MyApp) getApplication()).daoSession;
+        final MyBookDao myBookDao = daoSession.getMyBookDao();
+        final ClassifyListLvAdapter adapter = new ClassifyListLvAdapter(list, this,true,myBookDao);
         mLv.setAdapter(adapter);
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,6 +74,24 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
                 Intent intent = new Intent(ClassifyListActivity.this, BookDetailsActivity.class);
                 intent.putExtra("bookBean",list.get(position));
                 startActivity(intent);
+            }
+        });
+        adapter.setListener(new ClassifyListLvAdapter.OnListener() {
+            @Override
+            public void onAddImgClickListener(View v, int position) {
+                BookBean bookBean = list.get(position);
+                ImageView addImg = (ImageView) v;
+                List<MyBook> myBooks = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+                if (myBooks != null && myBooks.size() > 0) {
+                    myBookDao.delete(myBooks.get(0));
+                    addImg.setImageResource(R.drawable.add_to);
+                } else {
+                    myBookDao.save(new MyBook(null, bookBean.getName(), bookBean.getBookImg(), bookBean.getBookId(),
+                            bookBean.getAuthor(), bookBean.getFrom(), bookBean.getDescription(),
+                            bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), 0, 0));
+                    addImg.setImageResource(R.drawable.add_to_success);
+                }
+                adapter.notifyDataSetChanged();
             }
         });
     }

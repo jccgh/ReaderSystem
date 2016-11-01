@@ -126,14 +126,16 @@
                         android:id="@+id/my_book_img"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@mipmap/ic_launcher" />
+                        android:padding="5dp"
+                        android:src="@drawable/bookrack" />
 
                     <TextView
                         android:id="@+id/my_book_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="加入书架" />
+                        android:text="加入书架"
+                        android:textColor="@color/tv_color" />
                 </LinearLayout>
 
                 <View
@@ -142,6 +144,7 @@
                     android:background="@android:color/darker_gray" />
 
                 <LinearLayout
+                    android:id="@+id/share_layout"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -149,15 +152,19 @@
                     android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/share_img"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@mipmap/ic_launcher" />
+                        android:padding="5dp"
+                        android:src="@drawable/btnmarks_sharenote" />
 
                     <TextView
+                        android:id="@+id/share_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="分享" />
+                        android:text="分享"
+                        android:textColor="@color/tv_color" />
                 </LinearLayout>
 
                 <View
@@ -177,14 +184,16 @@
                         android:id="@+id/favorite_img"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@mipmap/ic_launcher" />
+                        android:padding="5dp"
+                        android:src="@drawable/collect_click" />
 
                     <TextView
                         android:id="@+id/favorite_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="收藏" />
+                        android:text="收藏"
+                        android:textColor="@color/tv_color" />
                 </LinearLayout>
 
                 <View
@@ -202,13 +211,15 @@
                     <ImageView
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@mipmap/ic_launcher" />
+                        android:padding="5dp"
+                        android:src="@drawable/report" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
-                        android:text="意见反馈" />
+                        android:text="意见反馈"
+                        android:textColor="@color/tv_color" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -259,7 +270,7 @@
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@drawable/linkicon_checkcontents" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -285,7 +296,8 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/ic_launcher" />
+                        android:padding="5dp"
+                        android:src="@drawable/similar_book" />
 
                     <TextView
                         android:id="@+id/class_name2"
@@ -311,6 +323,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:id="@+id/similar_author_layout"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:orientation="horizontal"
@@ -320,7 +333,8 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/ic_launcher" />
+                        android:padding="5dp"
+                        android:src="@drawable/similar_author" />
 
                     <TextView
                         android:id="@+id/author3"
@@ -355,7 +369,8 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_gravity="center"
-                        android:src="@mipmap/ic_launcher" />
+                        android:padding="5dp"
+                        android:src="@drawable/particulars" />
 
                     <TextView
                         android:layout_width="wrap_content"

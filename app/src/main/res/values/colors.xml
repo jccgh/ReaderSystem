@@ -17,4 +17,6 @@
 
     <!--studnet_home-->
     <color name="student_home_drawer_text_color">#8000</color>
+    <color name="tv_color">#8000</color>
+    <color name="tv_color_click">#ded8d3</color>
 </resources>
