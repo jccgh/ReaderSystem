@@ -42,7 +42,8 @@
         <activity android:name=".student.view.activity.BookDetailsActivity" />
         <activity android:name=".read.view.activity.ReadActivity" />
         <activity android:name=".student.view.activity.RecommendActivity" />
-        <activity android:name=".student.view.activity.NewBookActivity"></activity>
+        <activity android:name=".student.view.activity.NewBookActivity" />
+        <activity android:name=".student.view.activity.SearchActivity"></activity>
     </application>
 
 </manifest>

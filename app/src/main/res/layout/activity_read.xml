@@ -4,8 +4,69 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".read.view.activity.ReadActivity">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv"
+
+    <RelativeLayout
+        android:id="@+id/rv_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:id="@+id/current_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="3dp"
+                android:layout_marginLeft="10dp"
+                android:text="00:00" />
+
+            <TextView
+                android:id="@+id/chapter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="3dp"
+                android:text="1/1000章" />
+
+            <TextView
+                android:id="@+id/pager"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="3dp"
+                android:layout_marginRight="10dp"
+                android:text="1/10页" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="3dp"
+            android:text="title" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottom_layout"
+            android:layout_below="@id/title"></android.support.v7.widget.RecyclerView>
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:src="@drawable/frame"
+        android:visibility="gone" />
 </RelativeLayout>

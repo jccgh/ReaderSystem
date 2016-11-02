@@ -2,6 +2,7 @@ package com.liyunkun.readersystem.read.view.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,7 +37,7 @@ public class RvAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ReadViewHolder viewHolder = (ReadViewHolder) holder;
         PageBean pageBean = list.get(position);
-        viewHolder.contents.setText(pageBean.getMessage());
+        viewHolder.contents.setText(Html.fromHtml(pageBean.getMessage()));
     }
 
     @Override
@@ -46,19 +47,11 @@ public class RvAdapter extends RecyclerView.Adapter {
 
     private class ReadViewHolder extends RecyclerView.ViewHolder {
 
-        TextView title;
         TextView contents;
-        TextView pager;
-        TextView chapter;
-        TextView currentTime;
 
         public ReadViewHolder(View itemView) {
             super(itemView);
-            title = (TextView) itemView.findViewById(R.id.title);
             contents = (TextView) itemView.findViewById(R.id.contents);
-            pager = (TextView) itemView.findViewById(R.id.pager);
-            chapter = (TextView) itemView.findViewById(R.id.chapter);
-            currentTime = (TextView) itemView.findViewById(R.id.current_time);
 
         }
     }
