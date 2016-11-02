@@ -15,6 +15,7 @@ public class MyConstants {
     public static final String REMEMBER="remember";
     public static final String USER_NAME="userName";
     public static final String MODE_NUMBER="modeNumber";
+    public static final String BOOK_ID="bookId";
     public static final String MODE="mode";
     public static final int BOOK_MODE=0;
     public static final int LIST_MODE=1;

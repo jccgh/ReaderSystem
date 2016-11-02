@@ -84,6 +84,7 @@
             android:layout_height="48dp"
             android:background="@null"
             android:hint="@string/password"
+            android:inputType="numberPassword"
             android:paddingLeft="@dimen/dimen30"
             android:textSize="18sp" />
 

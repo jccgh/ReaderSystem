@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +19,7 @@ import com.liyunkun.readersystem.both.module.bean.MyBook;
 import com.liyunkun.readersystem.both.module.bean.MyBookDao;
 import com.liyunkun.readersystem.both.module.bean.MyFavorite;
 import com.liyunkun.readersystem.both.module.bean.MyFavoriteDao;
+import com.liyunkun.readersystem.read.view.activity.ReadActivity;
 import com.liyunkun.readersystem.student.presenter.BookDetailsPresenter;
 import com.liyunkun.readersystem.student.view.MyListView;
 import com.liyunkun.readersystem.student.view.adapter.ClassifyListLvAdapter;
@@ -58,6 +60,7 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
     private LinearLayout mSimilarAuthorLayout;
     private LinearLayout mShareLayout;
     private TextView mBookShelf;
+    private Button mNewRead;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +68,20 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         setContentView(R.layout.activity_book_details);
         initData2BookBean();
         initView();
-        initFavorite();
-        initBook();
         setData2ClassName();
         presenter.start(bookBean.getName(), bookBean.getClassId());
         presenter.start(bookBean.getName(), bookBean.getAuthor());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initFavorite();
+        initBook();
+    }
+
     private void initBook() {
-        myBookDao = daoSession.getMyBookDao();
-        List<MyBook> list = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
-        if (list != null && list.size() > 0) {
+        if (isPutBookShelf(bookBean.getBookId())) {
             mMyBookImg.setImageResource(R.drawable.bookrack_click);
             mMyBookTv.setText("移除书架");
             mMyBookTv.setTextColor(getResources().getColor(R.color.tv_color_click));
@@ -86,11 +92,16 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         }
     }
 
-    private void initFavorite() {
-        daoSession = ((MyApp) getApplication()).daoSession;
-        myFavoriteDao = daoSession.getMyFavoriteDao();
-        List<MyFavorite> list = myFavoriteDao.queryBuilder().where(MyFavoriteDao.Properties.BookId.eq(bookBean.getBookId())).list();
+    private boolean isPutBookShelf(int bookId) {
+        List<MyBook> list = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookId)).list();
         if (list != null && list.size() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private void initFavorite() {
+        if (isPutFavorite(bookBean.getBookId())) {
             mFavoriteImg.setImageResource(R.drawable.collect_orange);
             mFavoriteTv.setText("取消收藏");
             mFavoriteTv.setTextColor(getResources().getColor(R.color.tv_color_click));
@@ -99,6 +110,14 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
             mFavoriteTv.setText("收藏");
             mFavoriteTv.setTextColor(getResources().getColor(R.color.tv_color));
         }
+    }
+
+    private boolean isPutFavorite(int bookId) {
+        List<MyFavorite> list = myFavoriteDao.queryBuilder().where(MyFavoriteDao.Properties.BookId.eq(bookId)).list();
+        if (list != null && list.size() > 0) {
+            return true;
+        }
+        return false;
     }
 
     private void setData2ClassName() {
@@ -118,6 +137,10 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initView() {
+        daoSession = ((MyApp) getApplication()).daoSession;
+        myFavoriteDao = daoSession.getMyFavoriteDao();
+        myBookDao = daoSession.getMyBookDao();
+
         mBookImg = ((ImageView) findViewById(R.id.book_img));
         mBookName = ((TextView) findViewById(R.id.book_name));
         mBookName2 = ((TextView) findViewById(R.id.book_name2));
@@ -140,6 +163,7 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         mSimilarAuthorLayout = ((LinearLayout) findViewById(R.id.similar_author_layout));
         mShareLayout = ((LinearLayout) findViewById(R.id.share_layout));
         mBookShelf = ((TextView) findViewById(R.id.book_shelf));
+        mNewRead = ((Button) findViewById(R.id.new_read));
 
 
         Picasso.with(this).load(bookBean.getBookImg()).into(mBookImg);
@@ -160,6 +184,7 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         mMyBookLayout.setOnClickListener(this);
         mShareLayout.setOnClickListener(this);
         mBookShelf.setOnClickListener(this);
+        mNewRead.setOnClickListener(this);
     }
 
     private void initData2BookBean() {
@@ -182,11 +207,23 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
             case R.id.share_layout:
                 shareBook();
                 break;
-            case R.id.book_shelf:
+            case R.id.book_shelf: {
                 Intent intent = new Intent(this, StudentHomeActivity.class);
-                intent.putExtra(MyConstants.USER_NAME,StudentHomeActivity.userName);
+                intent.putExtra(MyConstants.USER_NAME, StudentHomeActivity.userName);
                 startActivity(intent);
-                break;
+            }
+            break;
+            case R.id.new_read: {
+                if (!isPutBookShelf(bookBean.getBookId())) {
+                    myBookDao.save(new MyBook(null, bookBean.getName(), bookBean.getBookImg(), bookBean.getBookId(),
+                            bookBean.getAuthor(), bookBean.getFrom(), bookBean.getDescription(),
+                            bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), 0, 0));
+                }
+                Intent intent = new Intent(this, ReadActivity.class);
+                intent.putExtra(MyConstants.BOOK_ID, bookBean.getBookId());
+                startActivity(intent);
+            }
+            break;
         }
     }
 

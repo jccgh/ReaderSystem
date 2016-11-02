@@ -1,8 +1,10 @@
 package com.liyunkun.readersystem.student.view.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +33,8 @@ public class MyBookFragment extends BaseFragment {
     private ImageView mIv;
     private RecyclerView mRv;
     private MyBookDao myBookDao;
+    private List<MyBook> list;
+    private MyBookFgRvAdapter adapter;
 
     @Nullable
     @Override
@@ -50,7 +54,7 @@ public class MyBookFragment extends BaseFragment {
     private void initData2BookList() {
         DaoSession daoSession = ((MyApp) getActivity().getApplication()).daoSession;
         myBookDao = daoSession.getMyBookDao();
-        final List<MyBook> list = myBookDao.queryBuilder().list();
+        list = myBookDao.queryBuilder().list();
         if (list != null && list.size() > 0) {
             mIv.setVisibility(View.GONE);
             mRv.setVisibility(View.VISIBLE);
@@ -61,14 +65,32 @@ public class MyBookFragment extends BaseFragment {
                 LinearLayoutManager manager = new LinearLayoutManager(getActivity());
                 mRv.setLayoutManager(manager);
             }
-            MyBookFgRvAdapter adapter = new MyBookFgRvAdapter(MyConstants.mode, list, getActivity());
+            adapter = new MyBookFgRvAdapter(MyConstants.mode, list, getActivity());
             mRv.setAdapter(adapter);
             adapter.setOnItemViewListener(new MyBookFgRvAdapter.OnItemViewListener() {
                 @Override
                 public void onItemClickListener(View v, int position) {
                     Intent intent = new Intent(getActivity(), ReadActivity.class);
-                    intent.putExtra("bookId",list.get(position).getBookId());
+                    intent.putExtra("bookId", list.get(position).getBookId());
                     startActivity(intent);
+                }
+
+                @Override
+                public void onItemLongClickListener(View v, final int position) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("提示")
+                            .setMessage("是否要移除书架并删除文件")
+                            .setPositiveButton("是", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MyBook myBook = list.get(position);
+                                    myBookDao.delete(myBook);
+                                    list.remove(position);
+                                    adapter.notifyItemRemoved(position);
+                                }
+                            })
+                            .setNegativeButton("否", null);
+                    builder.create().show();
                 }
             });
         } else {

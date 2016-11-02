@@ -23,18 +23,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".both.view.activity.LoadingActivity" />
-        <activity android:name=".both.view.activity.WelcomeActivity" />
-        <activity android:name=".both.view.activity.LoginActivity" />
-        <activity android:name=".both.view.activity.ResentActivity" />
-        <activity
-            android:name=".student.view.activity.StudentHomeActivity"
-            android:launchMode="singleTask">
+        <activity android:name=".both.view.activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".both.view.activity.LoginActivity" />
+        <activity android:name=".both.view.activity.ResentActivity" />
+        <activity
+            android:name=".student.view.activity.StudentHomeActivity"
+            android:launchMode="singleTask"></activity>
         <activity android:name=".administrator.view.activity.AdministratorHomeActivity" />
         <activity android:name=".student.view.activity.RankActivity" />
         <activity android:name=".student.view.activity.ClassifyActivity" />

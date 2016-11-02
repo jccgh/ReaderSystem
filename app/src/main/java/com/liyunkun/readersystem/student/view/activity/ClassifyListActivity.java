@@ -1,6 +1,7 @@
 package com.liyunkun.readersystem.student.view.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -16,6 +17,7 @@ import com.liyunkun.readersystem.both.module.bean.BookClassBean;
 import com.liyunkun.readersystem.both.module.bean.DaoSession;
 import com.liyunkun.readersystem.both.module.bean.MyBook;
 import com.liyunkun.readersystem.both.module.bean.MyBookDao;
+import com.liyunkun.readersystem.read.view.activity.ReadActivity;
 import com.liyunkun.readersystem.student.presenter.ClassifyListPresenter;
 import com.liyunkun.readersystem.student.view.adapter.ClassifyListLvAdapter;
 import com.liyunkun.readersystem.student.view.intf.IClassifyListView;
@@ -36,6 +38,8 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
     private ClassifyListLvAdapter adapter;
     private TextView mBookShelf;
     private MyBookDao myBookDao;
+    private ImageView mIv;
+    private AnimationDrawable drawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,7 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
         initData2BCB();
         initView();
         presenter.start(bookClassBean.getClassId());
+        showNoData();
     }
 
     @Override
@@ -58,6 +63,9 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
         mTitle = ((TextView) findViewById(R.id.tv));
         mBookShelf = ((TextView) findViewById(R.id.book_shelf));
 
+        mIv = ((ImageView) findViewById(R.id.iv2));
+        drawable = ((AnimationDrawable) mIv.getDrawable());
+
 
         mTitle.setText(bookClassBean.getType());
         mGoBack.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +78,7 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ClassifyListActivity.this, StudentHomeActivity.class);
-                intent.putExtra(MyConstants.USER_NAME,StudentHomeActivity.userName);
+                intent.putExtra(MyConstants.USER_NAME, StudentHomeActivity.userName);
                 startActivity(intent);
             }
         });
@@ -83,16 +91,25 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
 
     @Override
     public void updateLv(final List<BookBean> list) {
+        hintNoData();
         DaoSession daoSession = ((MyApp) getApplication()).daoSession;
         myBookDao = daoSession.getMyBookDao();
-        adapter = new ClassifyListLvAdapter(list, this,true, myBookDao);
+        adapter = new ClassifyListLvAdapter(list, this, true, myBookDao);
         mLv.setAdapter(adapter);
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ClassifyListActivity.this, BookDetailsActivity.class);
-                intent.putExtra("bookBean",list.get(position));
-                startActivity(intent);
+                BookBean bookBean = list.get(position);
+                List<MyBook> myBooks = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+                if (myBooks != null && myBooks.size() > 0) {
+                    Intent intent = new Intent(ClassifyListActivity.this, ReadActivity.class);
+                    intent.putExtra(MyConstants.BOOK_ID, bookBean.getBookId());
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(ClassifyListActivity.this, BookDetailsActivity.class);
+                    intent.putExtra("bookBean", bookBean);
+                    startActivity(intent);
+                }
             }
         });
         adapter.setListener(new ClassifyListLvAdapter.OnListener() {
@@ -113,5 +130,17 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private void showNoData() {
+        mIv.setVisibility(View.VISIBLE);
+        mLv.setVisibility(View.GONE);
+        drawable.start();
+    }
+
+    private void hintNoData() {
+        mIv.setVisibility(View.GONE);
+        mLv.setVisibility(View.VISIBLE);
+        drawable.stop();
     }
 }

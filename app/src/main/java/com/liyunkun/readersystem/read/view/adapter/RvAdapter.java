@@ -49,7 +49,7 @@ public class RvAdapter extends RecyclerView.Adapter {
 
         TextView contents;
 
-        public ReadViewHolder(View itemView) {
+        public ReadViewHolder(final View itemView) {
             super(itemView);
             contents = (TextView) itemView.findViewById(R.id.contents);
 

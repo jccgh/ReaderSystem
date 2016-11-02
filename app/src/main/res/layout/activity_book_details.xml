@@ -97,6 +97,7 @@
                 android:paddingRight="10dp">
 
                 <Button
+                    android:id="@+id/new_read"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

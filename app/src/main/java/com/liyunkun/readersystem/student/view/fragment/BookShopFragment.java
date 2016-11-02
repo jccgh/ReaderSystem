@@ -15,8 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.liyunkun.readersystem.BaseFragment;
+import com.liyunkun.readersystem.MyApp;
 import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.BookBean;
+import com.liyunkun.readersystem.both.module.bean.MyBook;
+import com.liyunkun.readersystem.both.module.bean.MyBookDao;
+import com.liyunkun.readersystem.read.view.activity.ReadActivity;
 import com.liyunkun.readersystem.student.module.bean.BookShopLvBean;
 import com.liyunkun.readersystem.student.presenter.BookShopPresenter;
 import com.liyunkun.readersystem.student.view.activity.BookDetailsActivity;
@@ -27,6 +31,7 @@ import com.liyunkun.readersystem.student.view.activity.RecommendActivity;
 import com.liyunkun.readersystem.student.view.adapter.BookShopLvAdapter;
 import com.liyunkun.readersystem.student.view.adapter.BookShopVpAdapter;
 import com.liyunkun.readersystem.student.view.intf.IBookShopView;
+import com.liyunkun.readersystem.utils.MyConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +53,7 @@ public class BookShopFragment extends BaseFragment implements IBookShopView, Vie
     private BookShopPresenter presenter = new BookShopPresenter(this);
     private LinearLayout mRecommendLayout;
     private LinearLayout mNewBookLayout;
+    private MyBookDao myBookDao;
 
     @Nullable
     @Override
@@ -135,13 +141,21 @@ public class BookShopFragment extends BaseFragment implements IBookShopView, Vie
         BookShopLvAdapter adapter = new BookShopLvAdapter(list, getActivity());
         measureHeightLv(adapter);
         mLv.setAdapter(adapter);
+        myBookDao = ((MyApp) getActivity().getApplication()).daoSession.getMyBookDao();
         adapter.setOnClick(new BookShopLvAdapter.onClick() {
             @Override
             public void onClick(View v, int position, int childPosition) {
                 BookBean bookBean = list.get(position).getList().get(childPosition);
-                Intent intent = new Intent(getActivity(), BookDetailsActivity.class);
-                intent.putExtra("bookBean", bookBean);
-                startActivity(intent);
+                List<MyBook> myBooks = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+                if (myBooks != null && myBooks.size() > 0) {
+                    Intent intent = new Intent(getActivity(), ReadActivity.class);
+                    intent.putExtra(MyConstants.BOOK_ID, bookBean.getBookId());
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getActivity(), BookDetailsActivity.class);
+                    intent.putExtra("bookBean", bookBean);
+                    startActivity(intent);
+                }
             }
         });
     }

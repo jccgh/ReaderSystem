@@ -75,6 +75,23 @@ public class MyBookFgRvAdapter extends RecyclerView.Adapter {
             super(itemView);
             bookImg = (ImageView) itemView.findViewById(R.id.book_img);
             bookName = (TextView) itemView.findViewById(R.id.book_name);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemViewListener != null) {
+                        onItemViewListener.onItemClickListener(v, getLayoutPosition());
+                    }
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (onItemViewListener != null) {
+                        onItemViewListener.onItemLongClickListener(v,getLayoutPosition());
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -96,6 +113,15 @@ public class MyBookFgRvAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (onItemViewListener != null) {
+                        onItemViewListener.onItemLongClickListener(v,getLayoutPosition());
+                    }
+                    return true;
+                }
+            });
         }
     }
 
@@ -107,5 +133,6 @@ public class MyBookFgRvAdapter extends RecyclerView.Adapter {
 
     public interface OnItemViewListener {
         void onItemClickListener(View v, int position);
+        void onItemLongClickListener(View v, int position);
     }
 }

@@ -1,6 +1,7 @@
 package com.liyunkun.readersystem.student.view.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.BookBean;
 import com.liyunkun.readersystem.both.module.bean.MyBook;
 import com.liyunkun.readersystem.both.module.bean.MyBookDao;
+import com.liyunkun.readersystem.read.view.activity.ReadActivity;
 import com.liyunkun.readersystem.student.presenter.RecommendPresenter;
 import com.liyunkun.readersystem.student.view.adapter.ClassifyListLvAdapter;
 import com.liyunkun.readersystem.student.view.intf.IRecommendView;
@@ -29,6 +31,8 @@ public class RecommendActivity extends AppCompatActivity implements View.OnClick
     private RecommendPresenter presenter = new RecommendPresenter(this);
     private ClassifyListLvAdapter adapter;
     private MyBookDao myBookDao;
+    private ImageView mIv;
+    private AnimationDrawable drawable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +40,15 @@ public class RecommendActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_recommend);
         initView();
         presenter.start();
+        showNoData();
     }
 
     private void initView() {
         mLv = ((ListView) findViewById(R.id.lv));
         mBookShelf = ((TextView) findViewById(R.id.book_shelf));
         mGoBack = ((ImageView) findViewById(R.id.go_back));
+        mIv = ((ImageView) findViewById(R.id.iv));
+        drawable = ((AnimationDrawable) mIv.getDrawable());
 
         mGoBack.setOnClickListener(this);
         mBookShelf.setOnClickListener(this);
@@ -63,15 +70,24 @@ public class RecommendActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public void updateData2Lv(final List<BookBean> list) {
+        hintNoData();
         myBookDao = ((MyApp) getApplication()).daoSession.getMyBookDao();
         adapter = new ClassifyListLvAdapter(list, this, true, myBookDao);
         mLv.setAdapter(adapter);
         mLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(RecommendActivity.this, BookDetailsActivity.class);
-                intent.putExtra("bookBean", list.get(position));
-                startActivity(intent);
+                BookBean bookBean = list.get(position);
+                List<MyBook> myBooks = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+                if (myBooks != null && myBooks.size() > 0) {
+                    Intent intent = new Intent(RecommendActivity.this, ReadActivity.class);
+                    intent.putExtra(MyConstants.BOOK_ID, bookBean.getBookId());
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(RecommendActivity.this, BookDetailsActivity.class);
+                    intent.putExtra("bookBean", bookBean);
+                    startActivity(intent);
+                }
             }
         });
         adapter.setListener(new ClassifyListLvAdapter.OnListener() {
@@ -92,5 +108,17 @@ public class RecommendActivity extends AppCompatActivity implements View.OnClick
                 adapter.notifyDataSetChanged();
             }
         });
+    }
+
+    private void showNoData() {
+        mIv.setVisibility(View.VISIBLE);
+        mLv.setVisibility(View.GONE);
+        drawable.start();
+    }
+
+    private void hintNoData() {
+        mIv.setVisibility(View.GONE);
+        mLv.setVisibility(View.VISIBLE);
+        drawable.stop();
     }
 }
