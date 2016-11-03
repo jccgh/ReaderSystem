@@ -1,10 +1,11 @@
 package com.liyunkun.readersystem.student.presenter;
 
 import com.liyunkun.readersystem.BasePresenter;
+import com.liyunkun.readersystem.administrator.module.intf.IBookCallBack;
+import com.liyunkun.readersystem.both.module.bean.BookBean;
 import com.liyunkun.readersystem.student.module.impl.ISearchDataImpl;
 import com.liyunkun.readersystem.student.module.intf.ISearchData;
 import com.liyunkun.readersystem.student.view.intf.ISearchView;
-import com.liyunkun.readersystem.student.view.intf.OnSearchCallBack;
 
 import java.util.List;
 
@@ -20,12 +21,22 @@ public class SearchPresenter implements BasePresenter{
         data=new ISearchDataImpl();
     }
 
+
     @Override
     public void start() {
-        data.getData(new OnSearchCallBack() {
+
+    }
+
+    public void start(String inputText) {
+        data.getData2Result(inputText, new IBookCallBack() {
             @Override
-            public void onSuccessful(List<String> list) {
-                view.initView2HotLayout(list);
+            public void onFailed(String errorMsg) {
+
+            }
+
+            @Override
+            public void onSuccessful(List<BookBean> list) {
+                view.searchData(list);
             }
         });
     }

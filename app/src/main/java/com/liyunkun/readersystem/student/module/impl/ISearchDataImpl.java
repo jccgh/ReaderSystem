@@ -1,8 +1,8 @@
 package com.liyunkun.readersystem.student.module.impl;
 
+import com.liyunkun.readersystem.administrator.module.intf.IBookCallBack;
 import com.liyunkun.readersystem.both.module.bean.BookBean;
 import com.liyunkun.readersystem.student.module.intf.ISearchData;
-import com.liyunkun.readersystem.student.view.intf.OnSearchCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,22 +15,23 @@ import cn.bmob.v3.listener.FindListener;
  * Created by liyunkun on 2016/11/2 0002.
  */
 public class ISearchDataImpl implements ISearchData {
+
     @Override
-    public void getData(final OnSearchCallBack callBack) {
-        final List<String> listString = new ArrayList<>();
-        BmobQuery<BookBean> query = new BmobQuery<>();
-        query.addWhereGreaterThan("count", 4500);
-        query.findObjects(new FindListener<BookBean>() {
+    public void getData2Result(String searchWorld, final IBookCallBack callBack) {
+        BmobQuery<BookBean> query1 = new BmobQuery<>();
+        query1.addWhereContains("name", searchWorld);
+        BmobQuery<BookBean> query2 = new BmobQuery<>();
+        query2.addWhereContains("author", searchWorld);
+        List<BmobQuery<BookBean>> listQuery = new ArrayList<>();
+        listQuery.add(query1);
+        listQuery.add(query2);
+        BmobQuery<BookBean> mainQuery = new BmobQuery<>();
+        mainQuery.or(listQuery);
+        mainQuery.findObjects(new FindListener<BookBean>() {
             @Override
             public void done(List<BookBean> list, BmobException e) {
                 if (e == null) {
-                    if (list != null && list.size() > 0) {
-                        for (BookBean bookBean : list) {
-                            listString.add(bookBean.getAuthor());
-                            listString.add(bookBean.getName());
-                        }
-                        callBack.onSuccessful(listString);
-                    }
+                    callBack.onSuccessful(list);
                 }
             }
         });

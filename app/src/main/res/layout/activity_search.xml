@@ -46,6 +46,7 @@
             android:textColorHint="@color/tv_color_click" />
 
         <ImageView
+            android:id="@+id/clear_text"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_alignRight="@id/search_et"
@@ -55,85 +56,101 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:paddingLeft="10dp">
-
-        <ImageView
-            android:id="@+id/iv"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@mipmap/ic_launcher" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/iv"
-            android:text="热门搜索" />
-
-        <TextView
-            android:id="@+id/replace"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:text="换一换" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/tv_color" />
-
-    <com.google.android.flexbox.FlexboxLayout
-        android:id="@+id/hot_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="15dp"
-        app:flexWrap="wrap" />
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
-        android:paddingLeft="10dp">
-
-        <ImageView
-            android:id="@+id/iv2"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:src="@mipmap/ic_launcher" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/iv2"
-            android:text="搜索历史" />
-
-        <TextView
-            android:id="@+id/clear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:text="清空历史" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/tv_color" />
-
     <ListView
-        android:id="@+id/lv"
+        android:id="@+id/lv_search_result"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"></ListView>
+        android:visibility="gone"></ListView>
+
+    <LinearLayout
+        android:id="@+id/content_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:paddingLeft="10dp">
+
+            <ImageView
+                android:id="@+id/iv"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/iv"
+                android:text="热门搜索" />
+
+            <TextView
+                android:id="@+id/replace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:text="换一换" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/tv_color" />
+
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/hot_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="15dp"
+            app:flexWrap="wrap" />
+
+        <RelativeLayout
+            android:id="@+id/history_layout"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:paddingLeft="10dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/iv2"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@mipmap/ic_launcher" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/iv2"
+                android:text="搜索历史" />
+
+            <TextView
+                android:id="@+id/clear_history"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:text="清空历史" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/tv_color" />
+
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:visibility="gone"></ListView>
+    </LinearLayout>
 </LinearLayout>
