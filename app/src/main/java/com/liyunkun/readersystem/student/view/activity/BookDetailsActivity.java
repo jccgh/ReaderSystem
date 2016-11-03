@@ -93,7 +93,9 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
     }
 
     private boolean isPutBookShelf(int bookId) {
-        List<MyBook> list = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookId)).list();
+        List<MyBook> list = myBookDao.queryBuilder()
+                .where(MyBookDao.Properties.UserName.eq(MyConstants.userName))
+                .where(MyBookDao.Properties.BookId.eq(bookId)).list();
         if (list != null && list.size() > 0) {
             return true;
         }
@@ -113,7 +115,9 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
     }
 
     private boolean isPutFavorite(int bookId) {
-        List<MyFavorite> list = myFavoriteDao.queryBuilder().where(MyFavoriteDao.Properties.BookId.eq(bookId)).list();
+        List<MyFavorite> list = myFavoriteDao.queryBuilder()
+                .where(MyFavoriteDao.Properties.UserName.eq(MyConstants.userName))
+                .where(MyFavoriteDao.Properties.BookId.eq(bookId)).list();
         if (list != null && list.size() > 0) {
             return true;
         }
@@ -217,7 +221,7 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
                 if (!isPutBookShelf(bookBean.getBookId())) {
                     myBookDao.save(new MyBook(null, bookBean.getName(), bookBean.getBookImg(), bookBean.getBookId(),
                             bookBean.getAuthor(), bookBean.getFrom(), bookBean.getDescription(),
-                            bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), 0, 0));
+                            bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), 0, 0, MyConstants.userName));
                 }
                 Intent intent = new Intent(this, ReadActivity.class);
                 intent.putExtra(MyConstants.BOOK_ID, bookBean.getBookId());
@@ -259,13 +263,15 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         if ("加入书架".equals(mMyBookTv.getText().toString())) {
             myBookDao.save(new MyBook(null, bookBean.getName(), bookBean.getBookImg(), bookBean.getBookId(),
                     bookBean.getAuthor(), bookBean.getFrom(), bookBean.getDescription(),
-                    bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), 0, 0));
+                    bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), 0, 0, MyConstants.userName));
             mMyBookImg.setImageResource(R.drawable.bookrack_click);
             mMyBookTv.setText("移除书架");
             mMyBookTv.setTextColor(getResources().getColor(R.color.tv_color_click));
 
         } else if ("移除书架".equals(mMyBookTv.getText().toString())) {
-            List<MyBook> list = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+            List<MyBook> list = myBookDao.queryBuilder()
+                    .where(MyBookDao.Properties.UserName.eq(MyConstants.userName))
+                    .where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
             if (list != null && list.size() > 0) {
                 myBookDao.delete(list.get(0));
                 mMyBookImg.setImageResource(R.drawable.bookrack);
@@ -279,12 +285,14 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         if ("收藏".equals(mFavoriteTv.getText().toString())) {
             myFavoriteDao.save(new MyFavorite(null, bookBean.getName(), bookBean.getBookImg(), bookBean.getBookId(),
                     bookBean.getAuthor(), bookBean.getFrom(), bookBean.getDescription(),
-                    bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId()));
+                    bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), MyConstants.userName));
             mFavoriteImg.setImageResource(R.drawable.collect_orange);
             mFavoriteTv.setText("取消收藏");
             mFavoriteTv.setTextColor(getResources().getColor(R.color.tv_color_click));
         } else if ("取消收藏".equals(mFavoriteTv.getText().toString())) {
-            List<MyFavorite> list = myFavoriteDao.queryBuilder().where(MyFavoriteDao.Properties.BookId.eq(bookBean.getBookId())).list();
+            List<MyFavorite> list = myFavoriteDao.queryBuilder()
+                    .where(MyFavoriteDao.Properties.UserName.eq(MyConstants.userName))
+                    .where(MyFavoriteDao.Properties.BookId.eq(bookBean.getBookId())).list();
             if (list != null && list.size() > 0) {
                 myFavoriteDao.delete(list.get(0));
                 mFavoriteImg.setImageResource(R.drawable.collect_click);

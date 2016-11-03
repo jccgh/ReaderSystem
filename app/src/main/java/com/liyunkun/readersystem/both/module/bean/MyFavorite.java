@@ -32,10 +32,12 @@ public class MyFavorite {
     private int rCount;//评论读数
     @Property
     private int classId;//分类ID
-    @Generated(hash = 859080483)
+    @Property
+    private String userName;
+    @Generated(hash = 634004146)
     public MyFavorite(Long id, String name, String bookImg, int BookId,
             String author, String from, String description, int count, int fCount,
-            int rCount, int classId) {
+            int rCount, int classId, String userName) {
         this.id = id;
         this.name = name;
         this.bookImg = bookImg;
@@ -47,6 +49,7 @@ public class MyFavorite {
         this.fCount = fCount;
         this.rCount = rCount;
         this.classId = classId;
+        this.userName = userName;
     }
     @Generated(hash = 1538796775)
     public MyFavorite() {
@@ -116,5 +119,11 @@ public class MyFavorite {
     }
     public void setClassId(int classId) {
         this.classId = classId;
+    }
+    public String getUserName() {
+        return this.userName;
+    }
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

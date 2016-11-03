@@ -187,6 +187,7 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
         sp = getSharedPreferences(MyConstants.MODE_NUMBER, MODE_PRIVATE);
         MyConstants.mode = sp.getInt(MyConstants.MODE, MyConstants.mode);
         userName = getIntent().getStringExtra(MyConstants.USER_NAME);
+        MyConstants.userName=userName;
         mTvUserName = ((TextView) findViewById(R.id.tv_user_name));
 
         mTvUserName.setText(userName);

@@ -100,7 +100,9 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 BookBean bookBean = list.get(position);
-                List<MyBook> myBooks = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+                List<MyBook> myBooks = myBookDao.queryBuilder()
+                        .where(MyBookDao.Properties.UserName.eq(MyConstants.userName))
+                        .where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
                 if (myBooks != null && myBooks.size() > 0) {
                     Intent intent = new Intent(ClassifyListActivity.this, ReadActivity.class);
                     intent.putExtra(MyConstants.BOOK_ID, bookBean.getBookId());
@@ -117,14 +119,16 @@ public class ClassifyListActivity extends BaseActivity implements IClassifyListV
             public void onAddImgClickListener(View v, int position) {
                 BookBean bookBean = list.get(position);
                 ImageView addImg = (ImageView) v;
-                List<MyBook> myBooks = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+                List<MyBook> myBooks = myBookDao.queryBuilder()
+                        .where(MyBookDao.Properties.UserName.eq(MyConstants.userName))
+                        .where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
                 if (myBooks != null && myBooks.size() > 0) {
                     myBookDao.delete(myBooks.get(0));
                     addImg.setImageResource(R.drawable.add_to);
                 } else {
                     myBookDao.save(new MyBook(null, bookBean.getName(), bookBean.getBookImg(), bookBean.getBookId(),
                             bookBean.getAuthor(), bookBean.getFrom(), bookBean.getDescription(),
-                            bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), 0, 0));
+                            bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), 0, 0, MyConstants.userName));
                     addImg.setImageResource(R.drawable.add_to_success);
                 }
                 adapter.notifyDataSetChanged();

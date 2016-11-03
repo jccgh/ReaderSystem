@@ -12,6 +12,7 @@ import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.BookBean;
 import com.liyunkun.readersystem.both.module.bean.MyBook;
 import com.liyunkun.readersystem.both.module.bean.MyBookDao;
+import com.liyunkun.readersystem.utils.MyConstants;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -26,12 +27,12 @@ public class ClassifyListLvAdapter extends BaseAdapter {
     private boolean isShowAddImg;
     private MyBookDao myBookDao;
 
-    public ClassifyListLvAdapter(List<BookBean> list, Context context,boolean isShowAddImg,MyBookDao myBookDao) {
+    public ClassifyListLvAdapter(List<BookBean> list, Context context, boolean isShowAddImg, MyBookDao myBookDao) {
         this.list = list;
         this.context = context;
-        this.isShowAddImg=isShowAddImg;
+        this.isShowAddImg = isShowAddImg;
         inflater = LayoutInflater.from(context);
-        this.myBookDao=myBookDao;
+        this.myBookDao = myBookDao;
     }
 
     @Override
@@ -64,10 +65,13 @@ public class ClassifyListLvAdapter extends BaseAdapter {
         holder.bookName.setText(bookBean.getName());
         if (isShowAddImg) {
             holder.addImg.setVisibility(View.VISIBLE);
-            List<MyBook> myBooks = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+            List<MyBook> myBooks = myBookDao.queryBuilder()
+                    .where(MyBookDao.Properties.UserName.eq(MyConstants.userName))
+                    .where(MyBookDao.Properties.BookId.eq(bookBean.getBookId()))
+                    .list();
             if (myBooks != null && myBooks.size() > 0) {
                 holder.addImg.setImageResource(R.drawable.add_to_success);
-            }else {
+            } else {
                 holder.addImg.setImageResource(R.drawable.add_to);
             }
         } else {
@@ -82,7 +86,7 @@ public class ClassifyListLvAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onAddImgClickListener(v,position);
+                    listener.onAddImgClickListener(v, position);
                 }
             }
         });
@@ -109,7 +113,8 @@ public class ClassifyListLvAdapter extends BaseAdapter {
     }
 
     private OnListener listener;
+
     public interface OnListener {
-        void onAddImgClickListener(View v,int position);
+        void onAddImgClickListener(View v, int position);
     }
 }

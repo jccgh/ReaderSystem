@@ -62,16 +62,8 @@ public class RvAdapter extends RecyclerView.Adapter {
             itemView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    switch (event.getAction()) {
-                        case MotionEvent.ACTION_UP:
-                        case MotionEvent.ACTION_DOWN:
-                            v.getParent().requestDisallowInterceptTouchEvent(true);
-                            break;
-                        case MotionEvent.ACTION_MOVE:
-                            v.getParent().requestDisallowInterceptTouchEvent(false);
-                            return true;
-                    }
-                    return false;
+                    v.getParent().requestDisallowInterceptTouchEvent(false);
+                    return true;
                 }
             });
         }

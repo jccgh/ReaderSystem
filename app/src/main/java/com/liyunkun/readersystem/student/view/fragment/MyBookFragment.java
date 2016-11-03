@@ -52,12 +52,9 @@ public class MyBookFragment extends BaseFragment {
     }
 
     private void initData2BookList() {
-        DaoSession daoSession = ((MyApp) getActivity().getApplication()).daoSession;
-        myBookDao = daoSession.getMyBookDao();
-        list = myBookDao.queryBuilder().list();
+        list = myBookDao.queryBuilder().where(MyBookDao.Properties.UserName.eq(MyConstants.userName)).list();
         if (list != null && list.size() > 0) {
-            mIv.setVisibility(View.GONE);
-            mRv.setVisibility(View.VISIBLE);
+            hideImage();
             if (MyConstants.BOOK_MODE == MyConstants.mode) {
                 GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
                 mRv.setLayoutManager(manager);
@@ -94,13 +91,25 @@ public class MyBookFragment extends BaseFragment {
                 }
             });
         } else {
-            mIv.setVisibility(View.VISIBLE);
-            mRv.setVisibility(View.GONE);
+            showImage();
         }
+    }
+
+    private void hideImage() {
+        mIv.setVisibility(View.GONE);
+        mRv.setVisibility(View.VISIBLE);
+    }
+
+    private void showImage() {
+        mIv.setVisibility(View.VISIBLE);
+        mRv.setVisibility(View.GONE);
     }
 
     private void initView(View view) {
         mIv = ((ImageView) view.findViewById(R.id.iv));
         mRv = ((RecyclerView) view.findViewById(R.id.rv));
+
+        DaoSession daoSession = ((MyApp) getActivity().getApplication()).daoSession;
+        myBookDao = daoSession.getMyBookDao();
     }
 }

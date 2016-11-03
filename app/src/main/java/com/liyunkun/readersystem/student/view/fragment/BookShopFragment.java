@@ -146,7 +146,10 @@ public class BookShopFragment extends BaseFragment implements IBookShopView, Vie
             @Override
             public void onClick(View v, int position, int childPosition) {
                 BookBean bookBean = list.get(position).getList().get(childPosition);
-                List<MyBook> myBooks = myBookDao.queryBuilder().where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
+                List<MyBook> myBooks = myBookDao.queryBuilder()
+                        .where(MyBookDao.Properties.UserName.eq(MyConstants.userName))
+                        .where(MyBookDao.Properties.BookId.eq(bookBean.getBookId()))
+                        .list();
                 if (myBooks != null && myBooks.size() > 0) {
                     Intent intent = new Intent(getActivity(), ReadActivity.class);
                     intent.putExtra(MyConstants.BOOK_ID, bookBean.getBookId());
