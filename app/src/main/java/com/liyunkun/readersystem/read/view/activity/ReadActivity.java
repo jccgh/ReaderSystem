@@ -7,8 +7,8 @@ import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -45,6 +45,10 @@ public class ReadActivity extends AppCompatActivity implements IReadView {
                     String time = ReadActivity.this.format.format(new Date());
                     mCurrentTime.setText(time);
                     mHandler.sendEmptyMessageDelayed(0, 1000);
+                    if (adapter != null) {
+                        mChapter.setText(adapter.getCurrentPosition() + 1 + "/" + beanList.size() + "章");
+                        mTitle.setText(beanList.get(adapter.getCurrentPosition()).getTitle());
+                    }
                     break;
             }
         }
@@ -52,13 +56,13 @@ public class ReadActivity extends AppCompatActivity implements IReadView {
     private TextView mTitle;
     private TextView mChapter;
     private List<PageBean> beanList;
+    private RvAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read);
         initView();
-        Log.d("liyunkundebugprint", "onCreate: ");
         getData2Book();
         presenter.start(bookId);
         showNoData();
@@ -95,20 +99,22 @@ public class ReadActivity extends AppCompatActivity implements IReadView {
         mCurrentTime = ((TextView) findViewById(R.id.current_time));
         mTitle = ((TextView) findViewById(R.id.title));
         mChapter = ((TextView) findViewById(R.id.chapter));
+        Button bt = (Button) findViewById(R.id.bt);
         mIv = ((ImageView) findViewById(R.id.iv));
         drawable = ((AnimationDrawable) mIv.getDrawable());
 
-        mRv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        bt.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+            public void onClick(View v) {
+                if (adapter != null) {
+                    showBottomPopupWindow();
+                }
             }
         });
+    }
+
+    private void showBottomPopupWindow() {
+
     }
 
     @Override
@@ -122,9 +128,9 @@ public class ReadActivity extends AppCompatActivity implements IReadView {
             for (int i = 0; i < list.size(); i++) {
                 beanList.add(list.get(list.size() - 1 - i));
             }
-            LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             mRv.setLayoutManager(manager);
-            RvAdapter adapter = new RvAdapter(beanList, this);
+            adapter = new RvAdapter(beanList, this);
             mRv.setAdapter(adapter);
         }
     }

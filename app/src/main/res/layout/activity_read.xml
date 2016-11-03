@@ -30,19 +30,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
-                android:layout_marginBottom="3dp"
-                android:text="1/1000章" />
-
-            <TextView
-                android:id="@+id/pager"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="3dp"
                 android:layout_marginRight="10dp"
-                android:text="1/10页" />
+                android:text="1/1000章" />
+
         </RelativeLayout>
 
         <TextView
@@ -53,6 +45,14 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="3dp"
             android:text="title" />
+
+        <Button
+            android:id="@+id/bt"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_centerInParent="true"
+            android:alpha="0"
+            android:background="@null" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv"

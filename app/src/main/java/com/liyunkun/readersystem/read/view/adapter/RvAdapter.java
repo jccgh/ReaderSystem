@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ public class RvAdapter extends RecyclerView.Adapter {
     private List<PageBean> list;
     private Context context;
     private LayoutInflater inflater;
+    private int currentPosition = 0;
 
     public RvAdapter(List<PageBean> list, Context context) {
         this.list = list;
@@ -35,6 +37,7 @@ public class RvAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        currentPosition = position;
         ReadViewHolder viewHolder = (ReadViewHolder) holder;
         PageBean pageBean = list.get(position);
         viewHolder.contents.setText(Html.fromHtml(pageBean.getMessage()));
@@ -45,6 +48,10 @@ public class RvAdapter extends RecyclerView.Adapter {
         return list.size();
     }
 
+    public int getCurrentPosition() {
+        return currentPosition;
+    }
+
     private class ReadViewHolder extends RecyclerView.ViewHolder {
 
         TextView contents;
@@ -52,7 +59,31 @@ public class RvAdapter extends RecyclerView.Adapter {
         public ReadViewHolder(final View itemView) {
             super(itemView);
             contents = (TextView) itemView.findViewById(R.id.contents);
-
+            itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_DOWN:
+                            v.getParent().requestDisallowInterceptTouchEvent(true);
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            v.getParent().requestDisallowInterceptTouchEvent(false);
+                            return true;
+                    }
+                    return false;
+                }
+            });
         }
     }
+
+//    private OnItemViewClickListener onItemViewClickListener;
+//
+//    public void setOnItemViewClickListener(OnItemViewClickListener onItemViewClickListener) {
+//        this.onItemViewClickListener = onItemViewClickListener;
+//    }
+//
+//    public interface OnItemViewClickListener {
+//        void onItemViewClick(View v, int position);
+//    }
 }
