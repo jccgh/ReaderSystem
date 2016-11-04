@@ -13,6 +13,7 @@ import com.liyunkun.readersystem.MyApp;
 import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.read.module.bean.BookMark;
 import com.liyunkun.readersystem.read.module.bean.BookMarkDao;
+import com.liyunkun.readersystem.read.view.adapter.MyAdapter;
 import com.liyunkun.readersystem.utils.MyConstants;
 
 import java.util.List;
@@ -58,6 +59,8 @@ public class BookMarkFragment extends BaseFragment {
                 .list();
         if (list != null && list.size() > 0) {
             hideLayout();
+            MyAdapter<BookMark> adapter = new MyAdapter<>(list, getActivity(), "mark");
+            mLv.setAdapter(adapter);
         } else {
             showLayout();
         }

@@ -168,6 +168,7 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
         mShareLayout = ((LinearLayout) findViewById(R.id.share_layout));
         mBookShelf = ((TextView) findViewById(R.id.book_shelf));
         mNewRead = ((Button) findViewById(R.id.new_read));
+        LinearLayout catalogLayout = (LinearLayout) findViewById(R.id.catalog_layout);
 
 
         Picasso.with(this).load(bookBean.getBookImg()).into(mBookImg);

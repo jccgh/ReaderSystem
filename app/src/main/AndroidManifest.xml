@@ -44,7 +44,9 @@
         <activity android:name=".student.view.activity.RecommendActivity" />
         <activity android:name=".student.view.activity.NewBookActivity" />
         <activity android:name=".student.view.activity.SearchActivity" />
-        <activity android:name=".read.view.activity.CatalogActivity"></activity>
+        <activity
+            android:name=".read.view.activity.CatalogActivity"
+            android:launchMode="singleTop"></activity>
     </application>
 
 </manifest>

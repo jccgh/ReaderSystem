@@ -6,7 +6,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +39,11 @@ public class CatalogActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_catalog);
         initView();
         initOrderImage();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initData();
     }
 
@@ -54,11 +58,11 @@ public class CatalogActivity extends AppCompatActivity implements View.OnClickLi
     private void initData() {
         titles = new String[]{"目录", "书签", "笔记"};
         fragmentList = new ArrayList<>();
-        catalogFragment = new CatalogFragment();
+        catalogFragment = CatalogFragment.getInstance(bookBean.getBookId());
         catalogFragment.setTitles(titles1);
         fragmentList.add(catalogFragment);
-        fragmentList.add(new BookMarkFragment());
-        fragmentList.add(new NoteFragment());
+        fragmentList.add(BookMarkFragment.getInstance(bookBean.getBookId()));
+        fragmentList.add(NoteFragment.getInstance(bookBean.getBookId()));
 
         CatalogAdapter adapter = new CatalogAdapter(getSupportFragmentManager(), titles, fragmentList);
         mVp.setAdapter(adapter);
@@ -117,7 +121,6 @@ public class CatalogActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.order:
-                Log.d("liyunkundebugprint", "onClick: ");
                 updateOrderImage();
                 break;
         }
@@ -126,12 +129,12 @@ public class CatalogActivity extends AppCompatActivity implements View.OnClickLi
     private void updateOrderImage() {
         if (MyConstants.order_mode == MyConstants.ASC) {
             mOrder.setImageResource(R.mipmap.ic_launcher);
-            MyConstants.order_mode=MyConstants.DESC;
-            catalogFragment.updateData2Lv();
+            MyConstants.order_mode = MyConstants.DESC;
+            startActivity(new Intent(this, CatalogActivity.class));
         } else if (MyConstants.order_mode == MyConstants.DESC) {
             mOrder.setImageResource(R.mipmap.ic_launcher);
-            MyConstants.order_mode=MyConstants.ASC;
-            catalogFragment.updateData2Lv();
+            MyConstants.order_mode = MyConstants.ASC;
+            startActivity(new Intent(this, CatalogActivity.class));
         }
     }
 }

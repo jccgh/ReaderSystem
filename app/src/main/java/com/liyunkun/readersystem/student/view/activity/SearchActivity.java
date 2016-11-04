@@ -36,6 +36,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * 注意事项：
+ * 注:模糊查询只对付费用户开放，付费后可直接使用。（因此在输入时只能输入正确的作者或者书名）
+ */
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener, ISearchView {
 
     private EditText mInputWorld;

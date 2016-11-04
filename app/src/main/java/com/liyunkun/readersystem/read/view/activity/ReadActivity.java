@@ -60,6 +60,7 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
     private SeekBar seekBar;
     private SharedPreferences sp;
     private BookBean bookBean;
+    private LayoutInflater inflater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,11 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
     protected void onResume() {
         super.onResume();
         current_position = sp.getInt(MyConstants.READ_POSITION + bookBean.getBookId(), current_position);
+        if (adapter != null && mRv != null) {
+            mRv.scrollToPosition(current_position);
+            adapter.notifyItemChanged(current_position);
+        }
+
     }
 
     @Override
@@ -123,6 +129,7 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
     }
 
     private void initView() {
+        inflater = LayoutInflater.from(this);
         format = new SimpleDateFormat("HH:mm");
         mRv = ((RecyclerView) findViewById(R.id.rv));
         mLayout = ((RelativeLayout) findViewById(R.id.rv_layout));
@@ -172,7 +179,6 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
     }
 
     private void initTopPopupWindow() {
-        LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.read_top_pw_item, null);
         initTopView(view);
         pwTop = new PopupWindow(view,
@@ -194,7 +200,6 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
     }
 
     private void initBottomPopupWindow() {
-        LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.read_bottom_pw_item, null);
         initBottomView(view);
         pwBottom = new PopupWindow(view,
@@ -209,6 +214,7 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
         TextView lastChapter = (TextView) view.findViewById(R.id.last_chapter);
         TextView nextChapter = (TextView) view.findViewById(R.id.next_chapter);
         LinearLayout readCatalogLayout = (LinearLayout) view.findViewById(R.id.read_catalog_layout);
+        LinearLayout settingLayout = (LinearLayout) view.findViewById(R.id.text_size_setting);
         seekBar.setMax(beanList.size());
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -232,6 +238,7 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
         lastChapter.setOnClickListener(this);
         nextChapter.setOnClickListener(this);
         readCatalogLayout.setOnClickListener(this);
+        settingLayout.setOnClickListener(this);
     }
 
     @Override
@@ -272,7 +279,7 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
                 }
                 Intent intent = new Intent(this, CatalogActivity.class);
                 intent.putExtra("bookBean", bookBean);
-                intent.putExtra("titles",titles);
+                intent.putExtra("titles", titles);
                 startActivity(intent);
                 break;
             case R.id.next_chapter: {
@@ -291,6 +298,11 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
                 } else {
                     Toast.makeText(ReadActivity.this, "亲，当前已是第一章", Toast.LENGTH_SHORT).show();
                 }
+            }
+            break;
+            case R.id.text_size_setting:
+            {
+
             }
             break;
         }
