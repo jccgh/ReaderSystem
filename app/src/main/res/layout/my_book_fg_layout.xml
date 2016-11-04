@@ -9,8 +9,7 @@
         android:id="@+id/iv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/default_book_import"
+        android:src="@drawable/iv_multi_center"
         android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView

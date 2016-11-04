@@ -42,7 +42,7 @@ public class ClassifyActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onClick(BookClassBean bookClassBean) {
                 Intent intent = new Intent(ClassifyActivity.this, ClassifyListActivity.class);
-                intent.putExtra("bookClassBean",bookClassBean);
+                intent.putExtra("bookClassBean", bookClassBean);
                 startActivity(intent);
             }
         });
@@ -62,7 +62,7 @@ public class ClassifyActivity extends BaseActivity implements View.OnClickListen
                 break;
             case R.id.book_shelf:
                 Intent intent = new Intent(this, StudentHomeActivity.class);
-                intent.putExtra(MyConstants.USER_NAME,StudentHomeActivity.userName);
+                intent.putExtra(MyConstants.USER_NAME, StudentHomeActivity.userName);
                 startActivity(intent);
                 break;
         }

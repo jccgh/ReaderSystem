@@ -60,6 +60,7 @@
         android:paddingBottom="5dp">
 
         <LinearLayout
+            android:id="@+id/read_catalog_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -69,7 +70,7 @@
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/read_catalog" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -90,7 +91,7 @@
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/read_setting_nightmode" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -111,7 +112,7 @@
             <ImageView
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@drawable/read_setting_font" />
 
             <TextView
                 android:layout_width="wrap_content"

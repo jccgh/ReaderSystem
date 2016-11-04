@@ -83,7 +83,7 @@ public class RecommendActivity extends AppCompatActivity implements View.OnClick
                         .where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
                 if (myBooks != null && myBooks.size() > 0) {
                     Intent intent = new Intent(RecommendActivity.this, ReadActivity.class);
-                    intent.putExtra(MyConstants.BOOK_ID, bookBean.getBookId());
+                    intent.putExtra(MyConstants.BOOK_BEAN, bookBean);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(RecommendActivity.this, BookDetailsActivity.class);

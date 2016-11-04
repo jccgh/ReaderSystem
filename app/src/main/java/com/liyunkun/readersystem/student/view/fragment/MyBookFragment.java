@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.liyunkun.readersystem.BaseFragment;
 import com.liyunkun.readersystem.MyApp;
 import com.liyunkun.readersystem.R;
+import com.liyunkun.readersystem.both.module.bean.BookBean;
 import com.liyunkun.readersystem.both.module.bean.DaoSession;
 import com.liyunkun.readersystem.both.module.bean.MyBook;
 import com.liyunkun.readersystem.both.module.bean.MyBookDao;
@@ -67,8 +68,11 @@ public class MyBookFragment extends BaseFragment {
             adapter.setOnItemViewListener(new MyBookFgRvAdapter.OnItemViewListener() {
                 @Override
                 public void onItemClickListener(View v, int position) {
+                    MyBook myBook = list.get(position);
                     Intent intent = new Intent(getActivity(), ReadActivity.class);
-                    intent.putExtra("bookId", list.get(position).getBookId());
+                    BookBean bookBean = new BookBean(myBook.getName(), myBook.getBookImg(), myBook.getBookId(),
+                            myBook.getAuthor(), myBook.getFrom(), myBook.getDescription(), myBook.getCount(), myBook.getFCount(), myBook.getRCount(), myBook.getClassId());
+                    intent.putExtra("bookBean", bookBean);
                     startActivity(intent);
                 }
 

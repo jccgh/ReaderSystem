@@ -224,7 +224,7 @@ public class BookDetailsActivity extends BaseActivity implements View.OnClickLis
                             bookBean.getCount(), bookBean.getfCount(), bookBean.getrCount(), bookBean.getClassId(), 0, 0, MyConstants.userName));
                 }
                 Intent intent = new Intent(this, ReadActivity.class);
-                intent.putExtra(MyConstants.BOOK_ID, bookBean.getBookId());
+                intent.putExtra("bookBean", bookBean);
                 startActivity(intent);
             }
             break;

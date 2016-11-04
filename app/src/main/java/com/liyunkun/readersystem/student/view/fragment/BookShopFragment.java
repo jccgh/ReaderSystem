@@ -152,7 +152,7 @@ public class BookShopFragment extends BaseFragment implements IBookShopView, Vie
                         .list();
                 if (myBooks != null && myBooks.size() > 0) {
                     Intent intent = new Intent(getActivity(), ReadActivity.class);
-                    intent.putExtra(MyConstants.BOOK_ID, bookBean.getBookId());
+                    intent.putExtra(MyConstants.BOOK_BEAN, bookBean);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(getActivity(), BookDetailsActivity.class);

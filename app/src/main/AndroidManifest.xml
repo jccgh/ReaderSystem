@@ -34,7 +34,7 @@
         <activity android:name=".both.view.activity.ResentActivity" />
         <activity
             android:name=".student.view.activity.StudentHomeActivity"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask" />
         <activity android:name=".administrator.view.activity.AdministratorHomeActivity" />
         <activity android:name=".student.view.activity.RankActivity" />
         <activity android:name=".student.view.activity.ClassifyActivity" />
@@ -43,7 +43,8 @@
         <activity android:name=".read.view.activity.ReadActivity" />
         <activity android:name=".student.view.activity.RecommendActivity" />
         <activity android:name=".student.view.activity.NewBookActivity" />
-        <activity android:name=".student.view.activity.SearchActivity"></activity>
+        <activity android:name=".student.view.activity.SearchActivity" />
+        <activity android:name=".read.view.activity.CatalogActivity"></activity>
     </application>
 
 </manifest>

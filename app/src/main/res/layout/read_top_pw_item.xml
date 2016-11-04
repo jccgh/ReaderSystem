@@ -28,5 +28,5 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="20dp"
         android:layout_toLeftOf="@id/more"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/read_setting_download" />
 </RelativeLayout>

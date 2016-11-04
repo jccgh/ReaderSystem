@@ -1,7 +1,6 @@
 package com.liyunkun.readersystem.student.view.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -22,19 +21,20 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.liyunkun.readersystem.MyApp;
 import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.BookBean;
+import com.liyunkun.readersystem.both.module.bean.DaoSession;
 import com.liyunkun.readersystem.both.module.bean.MyBook;
 import com.liyunkun.readersystem.both.module.bean.MyBookDao;
 import com.liyunkun.readersystem.read.view.activity.ReadActivity;
+import com.liyunkun.readersystem.student.module.bean.HistoryBean;
+import com.liyunkun.readersystem.student.module.bean.HistoryBeanDao;
 import com.liyunkun.readersystem.student.presenter.SearchPresenter;
 import com.liyunkun.readersystem.student.view.adapter.ClassifyListLvAdapter;
 import com.liyunkun.readersystem.student.view.intf.ISearchView;
 import com.liyunkun.readersystem.utils.MyConstants;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener, ISearchView {
 
@@ -44,12 +44,14 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private List<String> list = new ArrayList<>();
     private Random random = new Random();
     private SearchPresenter presenter = new SearchPresenter(this);
-    private SharedPreferences sp;
     private RelativeLayout mHistoryLayout;
     private ImageView mClearText;
     private LinearLayout mContentLayout;
     private ListView mResultLv;
     private MyBookDao myBookDao;
+    private LinearLayout mListLayout;
+    private ImageView mFailedIv;
+    private HistoryBeanDao historyBeanDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,13 +64,14 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initData2HistoryList() {
-        Set<String> historySet = sp.getStringSet("history", new HashSet<String>());
-        if (historySet != null && historySet.size() > 0) {
+        List<HistoryBean> list = historyBeanDao.queryBuilder()
+                .where(HistoryBeanDao.Properties.UserName.eq(MyConstants.userName)).list();
+        if (list != null && list.size() > 0) {
             mHistoryLayout.setVisibility(View.VISIBLE);
             mLv.setVisibility(View.VISIBLE);
             final List<String> historyList = new ArrayList<>();
-            for (String s : historySet) {
-                historyList.add(s);
+            for (HistoryBean historyBean : list) {
+                historyList.add(historyBean.getHistory());
             }
             ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, historyList);
             mLv.setAdapter(adapter);
@@ -109,11 +112,14 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
         mLv = ((ListView) findViewById(R.id.lv));
         mHistoryLayout = ((RelativeLayout) findViewById(R.id.history_layout));
         mHotLayout = ((FlexboxLayout) findViewById(R.id.hot_layout));
-        sp = getSharedPreferences(MyConstants.SEARCH_SP, MODE_PRIVATE);
-        myBookDao = ((MyApp) getApplication()).daoSession.getMyBookDao();
+        DaoSession daoSession = ((MyApp) getApplication()).daoSession;
+        myBookDao = daoSession.getMyBookDao();
+        historyBeanDao = daoSession.getHistoryBeanDao();
         mClearText = ((ImageView) findViewById(R.id.clear_text));
         mContentLayout = ((LinearLayout) findViewById(R.id.content_layout));
         mResultLv = ((ListView) findViewById(R.id.lv_search_result));
+        mListLayout = ((LinearLayout) findViewById(R.id.list_layout));
+        mFailedIv = ((ImageView) findViewById(R.id.failed_img));
 
         goBack.setOnClickListener(this);
         search.setOnClickListener(this);
@@ -134,8 +140,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     mClearText.setVisibility(View.VISIBLE);
                 } else {
                     mClearText.setVisibility(View.GONE);
-                    mContentLayout.setVisibility(View.VISIBLE);
-                    mResultLv.setVisibility(View.GONE);
+                    hideListLayout();
 
                 }
             }
@@ -145,6 +150,11 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
             }
         });
+    }
+
+    private void hideListLayout() {
+        mContentLayout.setVisibility(View.VISIBLE);
+        mListLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -158,6 +168,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 String result = mInputWorld.getText().toString();
                 if (result != null && !"".equals(result)) {
                     saveHistory(result);
+                    showListLayout();
                     presenter.start(result);
                 } else {
                     Toast.makeText(SearchActivity.this, "请输入搜索词", Toast.LENGTH_SHORT).show();
@@ -169,21 +180,36 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 initView2HotLayout();
                 break;
             case R.id.clear_history://清空历史
-                sp.edit().putStringSet("history", new HashSet<String>()).commit();
+            {
+                List<HistoryBean> list = historyBeanDao.queryBuilder()
+                        .where(HistoryBeanDao.Properties.UserName.eq(MyConstants.userName)).list();
+                for (HistoryBean historyBean : list) {
+                    historyBeanDao.delete(historyBean);
+                }
                 initData2HistoryList();
-                break;
+            }
+            break;
             case R.id.clear_text:
                 mInputWorld.setText("");
+                initData2HistoryList();
                 break;
         }
     }
 
+    private void showListLayout() {
+        mContentLayout.setVisibility(View.GONE);
+        mListLayout.setVisibility(View.VISIBLE);
+    }
+
     private void saveHistory(String result) {
-        Set<String> set = sp.getStringSet("history", new HashSet<String>());
-        if (!set.contains(result)) {
-            set.add(result);
+        List<HistoryBean> list = historyBeanDao.queryBuilder()
+                .where(HistoryBeanDao.Properties.History.eq(result))
+                .where(HistoryBeanDao.Properties.UserName.eq(MyConstants.userName))
+                .list();
+        if ( list.size() == 0) {
+            HistoryBean historyBean = new HistoryBean(null, MyConstants.userName, result);
+            historyBeanDao.save(historyBean);
         }
-        sp.edit().putStringSet("history", set).commit();
     }
 
     public void initView2HotLayout() {
@@ -213,9 +239,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void searchData(final List<BookBean> list) {
+        showListLayout();
         if (list != null && list.size() > 0) {
-            mContentLayout.setVisibility(View.GONE);
-            mResultLv.setVisibility(View.VISIBLE);
+            hideFailedImage();
             final ClassifyListLvAdapter adapter = new ClassifyListLvAdapter(list, this, true, myBookDao);
             mResultLv.setAdapter(adapter);
             adapter.setListener(new ClassifyListLvAdapter.OnListener() {
@@ -247,7 +273,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                             .where(MyBookDao.Properties.BookId.eq(bookBean.getBookId())).list();
                     if (myBooks != null && myBooks.size() > 0) {
                         Intent intent = new Intent(SearchActivity.this, ReadActivity.class);
-                        intent.putExtra(MyConstants.BOOK_ID, bookBean.getBookId());
+                        intent.putExtra(MyConstants.BOOK_BEAN, bookBean);
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent(SearchActivity.this, BookDetailsActivity.class);
@@ -256,6 +282,18 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                     }
                 }
             });
+        } else {
+            showFailedImage();
         }
+    }
+
+    private void hideFailedImage() {
+        mResultLv.setVisibility(View.VISIBLE);
+        mFailedIv.setVisibility(View.GONE);
+    }
+
+    private void showFailedImage() {
+        mResultLv.setVisibility(View.GONE);
+        mFailedIv.setVisibility(View.VISIBLE);
     }
 }
