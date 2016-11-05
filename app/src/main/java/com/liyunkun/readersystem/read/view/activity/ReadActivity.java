@@ -25,13 +25,18 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.liyunkun.readersystem.MyApp;
 import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.BookBean;
 import com.liyunkun.readersystem.both.module.bean.PageBean;
+import com.liyunkun.readersystem.read.module.bean.BookMark;
+import com.liyunkun.readersystem.read.module.bean.BookMarkDao;
 import com.liyunkun.readersystem.read.presenter.ReadPresenter;
 import com.liyunkun.readersystem.read.view.adapter.RvAdapter;
 import com.liyunkun.readersystem.read.view.intf.IReadView;
 import com.liyunkun.readersystem.utils.MyConstants;
+import com.liyunkun.readersystem.utils.ShareUtil;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,6 +64,7 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
     private boolean isTopShow = false;
     private boolean isBottomShow = false;
     private boolean isSettingShow = false;
+    private boolean isMoreShow = false;
     private SeekBar seekBar;
     private SharedPreferences sp;
     private BookBean bookBean;
@@ -78,6 +84,10 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
     private ImageView readingBgPowerless;
     private ImageView readingBgSoft;
     private RelativeLayout mRootLayout;
+    private ImageView bookMark;
+    private BookMarkDao bookMarkDao;
+    private SimpleDateFormat format2 = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private PopupWindow morePw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +137,15 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
 
     @Override
     public void onBackPressed() {
-        if (isBottomShow && isTopShow) {
+        if (pwSetting != null) {
+            if (!pwSetting.isShowing() && isSettingShow) {
+                isSettingShow = false;
+            }
+        }
+        if (isMoreShow) {
+            morePw.dismiss();
+            isMoreShow = false;
+        } else if (isBottomShow && isTopShow) {
             dismissTopAndBottom();
         } else if (isSettingShow) {
             pwSetting.dismiss();
@@ -172,6 +190,7 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
         sp = getSharedPreferences(MyConstants.READ_SP, MODE_PRIVATE);
         mIv = ((ImageView) findViewById(R.id.iv));
         mRootLayout = ((RelativeLayout) findViewById(R.id.root_layout));
+        bookMarkDao = ((MyApp) getApplication()).daoSession.getBookMarkDao();
         drawable = ((AnimationDrawable) mIv.getDrawable());
         mHandler = new Handler() {
             @Override
@@ -235,13 +254,10 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
 
     private void initTopView(View view) {
         ImageView goBack = (ImageView) view.findViewById(R.id.go_back);
+        ImageView more = (ImageView) view.findViewById(R.id.more);
 
-        goBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        goBack.setOnClickListener(this);
+        more.setOnClickListener(this);
     }
 
     private void initBottomPopupWindow() {
@@ -390,16 +406,6 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
                 adapter.notifyDataSetChanged();
                 initLineSpace();
                 break;
-            /**
-             * =1;//eye
-             =2;//kraft
-             =3;//night1
-             =4;//night2
-             =5;//powerless
-             =6;//soft
-             =7;//4
-             =8;//5
-             */
             case R.id.reading_bg_4:
                 MyConstants.reading_bg = MyConstants.reading_bg_7;
                 adapter.notifyDataSetChanged();
@@ -445,8 +451,87 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
                 adapter.notifyDataSetChanged();
                 initReadingBg();
                 break;
+            case R.id.go_back:
+                finish();
+                break;
+            case R.id.more:
+                toastMorePw();
+                isMoreShow = true;
+                break;
+            case R.id.mark_layout: {
+                PageBean pageBean = beanList.get(adapter.getCurrentPosition());
+                if (isAddBookMark()) {
+                    List<BookMark> list = bookMarkDao.queryBuilder()
+                            .where(BookMarkDao.Properties.PageId.eq(pageBean.getPageId()))
+                            .where(BookMarkDao.Properties.BookId.eq(bookBean.getBookId()))
+                            .where(BookMarkDao.Properties.UserName.eq(MyConstants.userName))
+                            .list();
+                    if (list != null && list.size() > 0) {
+                        bookMarkDao.delete(list.get(0));
+                        Toast.makeText(ReadActivity.this, "书签已删除", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    String time = this.format2.format(new Date());
+                    bookMarkDao.save(new BookMark(time, null, pageBean.getMessage(),
+                            pageBean.getTitle(), pageBean.getPageId(), MyConstants.userName, bookBean.getBookId()));
+                    Toast.makeText(ReadActivity.this, "书签添加成功", Toast.LENGTH_SHORT).show();
+                }
+            }
+            break;
+            case R.id.share_layout: {
+                ShareUtil.share(bookBean, this);
+            }
+            break;
 
 
+        }
+    }
+
+    private void toastMorePw() {
+        View view = inflater.inflate(R.layout.read_more_pw_item, null);
+        initMoreView(view);
+        morePw = new PopupWindow(view,
+                (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 180, getResources().getDisplayMetrics())),
+                (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 250, getResources().getDisplayMetrics())));
+        morePw.setOutsideTouchable(true);
+        morePw.setBackgroundDrawable(new BitmapDrawable());
+        morePw.showAtLocation(mRv, Gravity.TOP,
+                getResources().getDisplayMetrics().widthPixels - morePw.getWidth() - (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics())),
+                (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 85, getResources().getDisplayMetrics())));
+    }
+
+    private void initMoreView(View view) {
+        ImageView bookImg = (ImageView) view.findViewById(R.id.book_img);
+        Picasso.with(this).load(bookBean.getBookImg()).into(bookImg);
+        TextView bookName = (TextView) view.findViewById(R.id.book_name);
+        bookName.setText(bookBean.getName());
+        TextView author = (TextView) view.findViewById(R.id.author);
+        author.setText(bookBean.getAuthor());
+        bookMark = ((ImageView) view.findViewById(R.id.book_mark));
+        LinearLayout markLayout = (LinearLayout) view.findViewById(R.id.mark_layout);
+        markLayout.setOnClickListener(this);
+        initBookMark();
+        LinearLayout shareLayout = (LinearLayout) view.findViewById(R.id.share_layout);
+        shareLayout.setOnClickListener(this);
+    }
+
+    private boolean isAddBookMark() {
+        List<BookMark> list = bookMarkDao.queryBuilder()
+                .where(BookMarkDao.Properties.PageId.eq(beanList.get(adapter.getCurrentPosition()).getPageId()))
+                .where(BookMarkDao.Properties.BookId.eq(bookBean.getBookId()))
+                .where(BookMarkDao.Properties.UserName.eq(MyConstants.userName))
+                .list();
+        if (list != null && list.size() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private void initBookMark() {
+        if (isAddBookMark()) {
+            bookMark.setImageResource(R.drawable.read_bookmark);
+        } else {
+            bookMark.setImageResource(R.drawable.read_bookmark);
         }
     }
 
