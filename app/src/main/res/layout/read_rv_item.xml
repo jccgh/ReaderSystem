@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/title"
             android:padding="10dp"
-            android:lineSpacingExtra="10dp"
+            android:lineSpacingExtra="20dp"
             android:textColor="@color/black"
             android:textSize="18sp" />
     </RelativeLayout>

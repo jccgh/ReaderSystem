@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.liyunkun.readersystem.R;
 import com.liyunkun.readersystem.both.module.bean.PageBean;
+import com.liyunkun.readersystem.utils.MyConstants;
 
 import java.util.List;
 
@@ -40,6 +41,37 @@ public class RvAdapter extends RecyclerView.Adapter {
         currentPosition = position;
         ReadViewHolder viewHolder = (ReadViewHolder) holder;
         PageBean pageBean = list.get(position);
+        switch (MyConstants.reading_bg) {
+            case 0://default
+               viewHolder.contents.setTextColor(context.getResources().getColor(R.color.read_tv_color_default));
+                break;
+            case 1://eye
+                viewHolder.contents.setTextColor(context.getResources().getColor(R.color.read_tv_color_eye));
+                break;
+            case 2://kraft
+                viewHolder.contents.setTextColor(context.getResources().getColor(R.color.read_tv_color_kraft));
+                break;
+            case 3://night1
+                viewHolder.contents.setTextColor(context.getResources().getColor(R.color.read_tv_color_night1));
+                break;
+            case 4://night2
+                viewHolder.contents.setTextColor(context.getResources().getColor(R.color.read_tv_color_night2));
+                break;
+            case 5://powerless
+                viewHolder.contents.setTextColor(context.getResources().getColor(R.color.read_tv_color_powerless));
+                break;
+            case 6://soft
+                viewHolder.contents.setTextColor(context.getResources().getColor(R.color.read_tv_color_soft));
+                break;
+            case 7://4
+                viewHolder.contents.setTextColor(context.getResources().getColor(R.color.read_tv_color_4));
+                break;
+            case 8://5
+                viewHolder.contents.setTextColor(context.getResources().getColor(R.color.read_tv_color_5));
+                break;
+        }
+        viewHolder.contents.setTextSize(MyConstants.default_text_size);
+        viewHolder.contents.setLineSpacing(50, MyConstants.line_height);
         viewHolder.contents.setText(Html.fromHtml(pageBean.getMessage()));
     }
 

@@ -19,4 +19,25 @@
     <color name="student_home_drawer_text_color">#8000</color>
     <color name="tv_color">#8000</color>
     <color name="tv_color_click">#ded8d3</color>
+
+    <!--read-->
+    <color name="read_bg_default">#f3efe6</color>
+    <color name="read_bg_eye">#ccebcc</color>
+    <color name="read_bg_kraft">#c9bfa7</color>
+    <color name="read_bg_night1">#021621</color>
+    <color name="read_bg_night2">#101e21</color>
+    <color name="read_bg_powerless">#020202</color>
+    <color name="read_bg_soft">#000</color>
+    <color name="read_bg_4">#393431</color>
+    <color name="read_bg_5">#715d62</color>
+
+    <color name="read_tv_color_default">#3f403e</color>
+    <color name="read_tv_color_eye">#1b211b</color>
+    <color name="read_tv_color_kraft">#373328</color>
+    <color name="read_tv_color_night1">#244957</color>
+    <color name="read_tv_color_night2">#4a585a</color>
+    <color name="read_tv_color_powerless">#bbbbbb</color>
+    <color name="read_tv_color_soft">#2e2c2a</color>
+    <color name="read_tv_color_4">#84847f</color>
+    <color name="read_tv_color_5">#b7adaf</color>
 </resources>
