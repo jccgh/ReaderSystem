@@ -529,7 +529,7 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
 
     private void initBookMark() {
         if (isAddBookMark()) {
-            bookMark.setImageResource(R.drawable.read_bookmark);
+            bookMark.setImageResource(R.drawable.reading_marks_selected);
         } else {
             bookMark.setImageResource(R.drawable.read_bookmark);
         }

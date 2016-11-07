@@ -49,9 +49,9 @@ public class CatalogActivity extends AppCompatActivity implements View.OnClickLi
 
     private void initOrderImage() {
         if (MyConstants.order_mode == MyConstants.ASC) {
-            mOrder.setImageResource(R.mipmap.ic_launcher);
+            mOrder.setImageResource(R.drawable.catelog_inverted_normal);
         } else if (MyConstants.order_mode == MyConstants.DESC) {
-            mOrder.setImageResource(R.mipmap.ic_launcher);
+            mOrder.setImageResource(R.drawable.catelog_positive_normal);
         }
     }
 
@@ -128,11 +128,11 @@ public class CatalogActivity extends AppCompatActivity implements View.OnClickLi
 
     private void updateOrderImage() {
         if (MyConstants.order_mode == MyConstants.ASC) {
-            mOrder.setImageResource(R.mipmap.ic_launcher);
+            mOrder.setImageResource(R.drawable.catelog_positive_normal);
             MyConstants.order_mode = MyConstants.DESC;
             startActivity(new Intent(this, CatalogActivity.class));
         } else if (MyConstants.order_mode == MyConstants.DESC) {
-            mOrder.setImageResource(R.mipmap.ic_launcher);
+            mOrder.setImageResource(R.drawable.catelog_inverted_normal);
             MyConstants.order_mode = MyConstants.ASC;
             startActivity(new Intent(this, CatalogActivity.class));
         }
