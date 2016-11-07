@@ -468,12 +468,14 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
                             .list();
                     if (list != null && list.size() > 0) {
                         bookMarkDao.delete(list.get(0));
+                        initBookMark();
                         Toast.makeText(ReadActivity.this, "书签已删除", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     String time = this.format2.format(new Date());
                     bookMarkDao.save(new BookMark(time, null, pageBean.getMessage(),
                             pageBean.getTitle(), pageBean.getPageId(), MyConstants.userName, bookBean.getBookId()));
+                    initBookMark();
                     Toast.makeText(ReadActivity.this, "书签添加成功", Toast.LENGTH_SHORT).show();
                 }
             }
