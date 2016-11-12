@@ -1,6 +1,7 @@
 package com.liyunkun.readersystem.read.view.adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,9 +66,9 @@ public class MyAdapter<T> extends BaseAdapter {
         } else if ("mark".equals(type)) {
             BookMark bookMark = (BookMark) list.get(position);
             holder.pageTitle.setText(bookMark.getPageTitle());
-            holder.content.setMaxLines(3);
+            holder.content.setMaxLines(5);
             holder.content.setEllipsize(TextUtils.TruncateAt.END);
-            holder.content.setText(bookMark.getContent());
+            holder.content.setText(Html.fromHtml(bookMark.getContent()));
             holder.createTime.setText(bookMark.getCreateTime());
         }
         return convertView;

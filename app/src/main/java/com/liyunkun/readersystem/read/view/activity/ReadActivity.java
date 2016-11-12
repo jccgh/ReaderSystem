@@ -34,6 +34,7 @@ import com.liyunkun.readersystem.read.module.bean.BookMarkDao;
 import com.liyunkun.readersystem.read.presenter.ReadPresenter;
 import com.liyunkun.readersystem.read.view.adapter.RvAdapter;
 import com.liyunkun.readersystem.read.view.intf.IReadView;
+import com.liyunkun.readersystem.student.view.activity.BookDetailsActivity;
 import com.liyunkun.readersystem.utils.MyConstants;
 import com.liyunkun.readersystem.utils.ShareUtil;
 import com.squareup.picasso.Picasso;
@@ -484,7 +485,13 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
                 ShareUtil.share(bookBean, this);
             }
             break;
-
+            case R.id.book_layout:
+            {
+                Intent intent1 = new Intent(this, BookDetailsActivity.class);
+                intent1.putExtra("bookBean",bookBean);
+                startActivity(intent1);
+            }
+                break;
 
         }
     }
@@ -515,6 +522,8 @@ public class ReadActivity extends AppCompatActivity implements IReadView, View.O
         initBookMark();
         LinearLayout shareLayout = (LinearLayout) view.findViewById(R.id.share_layout);
         shareLayout.setOnClickListener(this);
+        RelativeLayout bookLayout = (RelativeLayout) view.findViewById(R.id.book_layout);
+        bookLayout.setOnClickListener(this);
     }
 
     private boolean isAddBookMark() {
