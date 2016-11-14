@@ -18,7 +18,8 @@ public class ILoadingImpl implements ILoading {
     @Override
     public int[] getData() {
         int[] img = new int[]{
-                R.drawable.loading1, R.drawable.loading3, R.drawable.loading2, R.drawable.loading4, R.drawable.loading5, R.drawable.loading6
+                R.drawable.book_default, R.drawable.book_default, R.drawable.book_default, R.drawable.book_default,
+                R.drawable.book_default, R.drawable.book_default
         };
         return img;
     }

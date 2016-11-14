@@ -66,6 +66,7 @@ public class WelcomeActivity extends BaseActivity {
         mBtJump.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isRunning = false;
                 if (isLast) {
                     startActivity(new Intent(WelcomeActivity.this, LoadingActivity.class));
                     finish();

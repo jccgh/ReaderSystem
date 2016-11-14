@@ -68,7 +68,7 @@
             android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:padding="15dp"
-            android:src="@drawable/loading7"
+            android:src="@drawable/book_default"
             android:visibility="gone" />
     </RelativeLayout>
 
@@ -93,7 +93,7 @@
             android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:padding="15dp"
-            android:src="@drawable/loading7"
+            android:src="@drawable/book_default"
             android:visibility="gone" />
     </RelativeLayout>
 
@@ -118,7 +118,7 @@
             android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:padding="15dp"
-            android:src="@drawable/loading7"
+            android:src="@drawable/book_default"
             android:visibility="gone" />
     </RelativeLayout>
 

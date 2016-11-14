@@ -25,7 +25,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:padding="5dp"
-                app:placeholderImage="@drawable/default_user_icon"
+                app:placeholderImage="@drawable/book_default"
                 app:roundAsCircle="true" />
 
             <TextView
@@ -135,7 +135,7 @@
                 android:id="@+id/iv_user_face"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                app:placeholderImage="@drawable/default_user_icon"
+                app:placeholderImage="@drawable/book_default"
                 app:roundAsCircle="true" />
 
             <ImageView

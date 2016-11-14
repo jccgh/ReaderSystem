@@ -153,7 +153,7 @@ public class StudentHomeActivity extends BaseActivity implements View.OnClickLis
     }
 
     private void initImage2UserIcon() {
-        Uri uri = Uri.parse("res:///" + R.drawable.default_user_icon);
+        Uri uri = Uri.parse("res:///" + R.drawable.book_default);
         mIvMine.setImageURI(uri);
         mDrawerUserIcon.setImageURI(uri);
     }

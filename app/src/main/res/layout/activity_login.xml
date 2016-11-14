@@ -68,7 +68,7 @@
             android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:padding="15dp"
-            android:src="@drawable/loading7"
+            android:src="@drawable/delete"
             android:visibility="gone" />
     </RelativeLayout>
 
@@ -94,7 +94,7 @@
             android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:padding="15dp"
-            android:src="@drawable/loading7"
+            android:src="@drawable/delete"
             android:visibility="gone" />
     </RelativeLayout>
 
