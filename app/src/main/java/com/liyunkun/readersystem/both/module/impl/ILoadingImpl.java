@@ -18,8 +18,8 @@ public class ILoadingImpl implements ILoading {
     @Override
     public int[] getData() {
         int[] img = new int[]{
-                R.drawable.book_default, R.drawable.book_default, R.drawable.book_default, R.drawable.book_default,
-                R.drawable.book_default, R.drawable.book_default
+                R.drawable.btn_mark_1, R.drawable.btn_mark_2, R.drawable.btn_mark_3, R.drawable.btn_mark_4,
+                R.drawable.btn_mark_5, R.drawable.btn_mark_6
         };
         return img;
     }

@@ -33,7 +33,7 @@ public class LoadingVpAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, int position) {
         ImageView iv = new ImageView(context);
         iv.setImageResource(img[position]);
-        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        iv.setPadding(50,50,50,50);
         container.addView(iv);
         return iv;
     }
